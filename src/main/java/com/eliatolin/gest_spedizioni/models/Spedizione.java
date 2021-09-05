@@ -12,6 +12,7 @@ import java.util.Date;
  */
 
 public class Spedizione{
+    protected final String user;
     protected final String id;
     protected final String destinazione;
     protected final int peso;
@@ -19,7 +20,8 @@ public class Spedizione{
     protected final Date date;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
     
-    public Spedizione(String id, int peso, Date data, String destinazione){
+    public Spedizione(String user,String id, int peso, Date data, String destinazione){
+        this.user = user;
         this.id = id;
         this.peso = peso;
         this.date = data;
@@ -27,8 +29,9 @@ public class Spedizione{
         this.stato = "IN_PREPARAZIONE";
     }
     
-    public Spedizione(String id, int peso, Date data, String destinazione, 
+    public Spedizione(String user,String id, int peso, Date data, String destinazione, 
             String stato){
+        this.user = user;
         this.id = id;
         this.peso = peso;
         this.date = data;
@@ -47,7 +50,7 @@ public class Spedizione{
                     this.stato = "FALLITA";
                     break;
                 }
-                this.stato = "CONSEGNATA";
+                this.stato = "RICEVUTA";
                 break;
             default:
                 break;
@@ -83,10 +86,20 @@ public class Spedizione{
     {
         return sdf.format(date);
     }
-
+    
+    public String getUtente()
+    {
+        return user;
+    }
+    
+    public float getValoreAssicurato()
+    {
+        return 0;
+    }
+    
     @Override
     public String toString() {
-        return getId() + ";"+ getDestinazione() + ";" + getPeso() + ";" +
+        return getUtente()+";"+getId() + ";"+ getDestinazione() + ";" + getPeso() + ";" +
                 getDateToString() +";"+getStato()+";";
     }
 }

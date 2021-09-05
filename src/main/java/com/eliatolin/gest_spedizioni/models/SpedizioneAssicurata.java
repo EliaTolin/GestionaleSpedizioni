@@ -10,36 +10,19 @@ import java.util.Date;
  * @author eliatolin
  */
 
-
 public class SpedizioneAssicurata extends Spedizione{
     
     private float valoreAssicurato = 0;
-    private boolean assicurata = false;
-    protected String stato;
     
-    public SpedizioneAssicurata(String id, int peso, Date data, String destinazione, 
-            String stato, boolean assicurata, float valoreAssicurato){
-        super(id,peso,data,destinazione);
+    public SpedizioneAssicurata(String user,String id, int peso, Date data, String destinazione, 
+            String stato, float valoreAssicurato){
+        super(user,id,peso,data,destinazione);
         setStato(stato);
         setValoreAssicurato(valoreAssicurato);
-        setAssicurata(assicurata);
     }
     
     public void setValoreAssicurato(float valoreAssicurato) {
         this.valoreAssicurato = valoreAssicurato;
-    }
-    
-    public void setAssicurata(boolean assicurata) {
-        this.assicurata = assicurata;
-    }
-
-    public boolean getAssicurata() {
-        return assicurata;
-    }
-    
-    public float getValoreAssicurato()
-    {
-        return valoreAssicurato;
     }
     
     public void aggiornaStato()
@@ -51,7 +34,7 @@ public class SpedizioneAssicurata extends Spedizione{
     
     @Override
     public String toString() {
-        return getId()+";"+getDestinazione()+";"+getPeso()+";"
-                +getDateToString()+";"+getValoreAssicurato()+";"+getStato()+";";
+        return getUtente()+";"+getId()+";"+getDestinazione()+";"+getPeso()+";"
+                +getDateToString()+";"+getStato()+";"+getValoreAssicurato()+";";
     }
 }

@@ -46,7 +46,7 @@ public class RegistrazioneForm extends JFrame implements ActionListener  {
         
         //creo la label per la password
         addressLabel = new JLabel();  
-        addressLabel.setText("Password");      //set label value for txtFieldPassword  
+        addressLabel.setText("Indirizzo");      //set label value for txtFieldIndirizzo
           
         //creo la textfield per l'inserimento della password 
         txtFieldAddress = new JTextField(20);

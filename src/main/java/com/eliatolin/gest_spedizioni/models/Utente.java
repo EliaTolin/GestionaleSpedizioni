@@ -1,4 +1,5 @@
 package com.eliatolin.gest_spedizioni.models;
+import com.eliatolin.gest_spedizioni.utils.DataUtility;
 
 public class Utente {
 	
@@ -24,6 +25,11 @@ public class Utente {
         public String getIndirizzo()
         {
             return this.indirizzo;
+        }
+        
+        public ListaSpedizioni getListaSpedizioni()
+        {
+            return DataUtility.getSpedizioniUtente(this.nomeUtente);
         }
 	
 	@Override

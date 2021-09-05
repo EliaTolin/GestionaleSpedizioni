@@ -6,6 +6,7 @@ import javax.swing.*;
 //DEBUG
 import com.eliatolin.gest_spedizioni.utils.DataUtility;
 import com.eliatolin.gest_spedizioni.models.Utente;
+import com.eliatolin.gest_spedizioni.models.ListaUtenti;
 import java.awt.*;  
 import java.awt.event.*; 
 import java.io.*;
@@ -43,9 +44,13 @@ class Gestionale
 //                System.out.println("Accss");
 //            else
 //                System.out.println("Not accss");
+            Utente us = new Utente("pro","dw","via pawicc");
+            ListaUtenti ls = DataUtility.getListaUtenti();
+            TabellaSpedizioni ts = new TabellaSpedizioni(ls);
+            ts.setVisible(true);
+            //WelcomeScreen ws = new WelcomeScreen();
+            //ws.setVisible(true);
             
-            WelcomeScreen ws = new WelcomeScreen();
-            ws.setVisible(true);
         }  
         catch(Exception e)  
         {     
