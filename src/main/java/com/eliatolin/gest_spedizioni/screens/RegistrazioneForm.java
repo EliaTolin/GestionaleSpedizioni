@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.*;  
 import java.lang.Exception;  
 import com.eliatolin.gest_spedizioni.models.Utente;
-import com.eliatolin.gest_spedizioni.utils.Database;
+import com.eliatolin.gest_spedizioni.utils.DataUtility;
 
 /**
  *
@@ -93,7 +93,7 @@ public class RegistrazioneForm extends JFrame implements ActionListener  {
                     JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if(Database.utenteRegistrato(username))
+            if(DataUtility.utenteRegistrato(username))
             {
                 JOptionPane.showMessageDialog(null,
                     "Errore utente già registrato",
@@ -102,7 +102,7 @@ public class RegistrazioneForm extends JFrame implements ActionListener  {
                 return;
             }
             
-            if(!Database.inserisciUtente(new Utente(username,password,address)))
+            if(!DataUtility.inserisciUtente(new Utente(username,password,address)))
             {
                 JOptionPane.showMessageDialog(null,
                     "Errore inserimento utente",

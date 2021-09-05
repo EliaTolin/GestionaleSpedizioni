@@ -4,7 +4,7 @@ import com.eliatolin.gest_spedizioni.screens.*;
 import javax.swing.*;
 
 //DEBUG
-import com.eliatolin.gest_spedizioni.utils.Database;
+import com.eliatolin.gest_spedizioni.utils.DataUtility;
 import com.eliatolin.gest_spedizioni.models.Utente;
 import java.awt.*;  
 import java.awt.event.*; 
@@ -38,8 +38,8 @@ class Gestionale
             */
             // returns pathnames for files and directory
 //            Utente us = new Utente("pro","dw","via pawicc");
-//            Database.inserisciUtente(us);
-//            if(Database.verificaAccesso("prwo", "adw"))
+//            DataUtility.inserisciUtente(us);
+//            if(DataUtility.verificaAccesso("prwo", "adw"))
 //                System.out.println("Accss");
 //            else
 //                System.out.println("Not accss");

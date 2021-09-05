@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;  
 import java.lang.Exception;  
 import com.eliatolin.gest_spedizioni.models.Utente;
-import com.eliatolin.gest_spedizioni.utils.Database;
+import com.eliatolin.gest_spedizioni.utils.DataUtility;
 
 public class LoginForm extends JFrame implements ActionListener  
 {  

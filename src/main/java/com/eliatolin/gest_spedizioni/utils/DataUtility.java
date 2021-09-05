@@ -6,7 +6,7 @@ import com.eliatolin.gest_spedizioni.models.SpedizioneAssicurata;
 
 import java.io.*;
 
-public abstract class Database {
+public abstract class DataUtility {
 
     static String file_user = "user.txt";
     static String file_ship = "ship.txt";
