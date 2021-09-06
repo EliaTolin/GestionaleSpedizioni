@@ -97,6 +97,17 @@ public class Spedizione{
         return 0;
     }
     
+    public boolean CheckRimborso()
+    {
+        return false;
+    }
+    
+    public boolean SpedizioneTerminata()
+    {
+        return (getStato() == "FALLITA" || getStato() == "RICEVUTA")?
+                true:false;
+    }
+    
     @Override
     public String toString() {
         return getUtente()+";"+getId() + ";"+ getDestinazione() + ";" + getPeso() + ";" +

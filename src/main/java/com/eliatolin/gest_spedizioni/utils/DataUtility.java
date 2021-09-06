@@ -252,6 +252,20 @@ public abstract class DataUtility {
             return new ListaUtenti();
         }
     }
+    
+    public static boolean salvaInfoUtenti(ListaUtenti lista)
+    {
+        for(int i = 0; i < lista.getNumeroUtenti();i++ )
+        {
+            Utente us = lista.getUtenteIdx(i);
+            DataUtility.inserisciUtente(us);
+            ListaSpedizioni ls = us.getListaSpedizioni();
+            for(int y = 0; y < ls.getNumeroSpedizioni(); y++)
+            {
+                DataUtility.salvaSpedizione(ls.getSpedizione(i));
+            }
+        }
+    }
 }
 
 /**

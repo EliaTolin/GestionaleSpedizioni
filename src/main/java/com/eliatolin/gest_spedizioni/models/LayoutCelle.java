@@ -26,10 +26,10 @@ public class LayoutCelle extends DefaultTableCellRenderer {
         switch (stato) {
 
             case "IN_PREPARAZIONE": {
-                setBackground(Color.YELLOW);
+                setBackground(Color.LIGHT_GRAY);
                 break;
             }
-            case "IN_TRANSITO": {
+            case "TRANSITO": {
                 setBackground(Color.MAGENTA);
                 break;
             }
@@ -41,7 +41,7 @@ public class LayoutCelle extends DefaultTableCellRenderer {
                 setBackground(Color.RED);
                 break;
             }
-            case "RICHIESTA_RIMBORSO": {
+            case "RIMBORSO_RICHIESTO": {
                 setBackground(Color.ORANGE);
                 break;
             }

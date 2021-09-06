@@ -32,6 +32,13 @@ public class SpedizioneAssicurata extends Spedizione{
             setStato("RIMBORSO_EROGATO");
     }
     
+    public boolean CheckRimborso()
+    {
+        if(this.getStato().equals("FALLITA"))
+            return true;
+        return false;
+    }
+    
     @Override
     public String toString() {
         return getUtente()+";"+getId()+";"+getDestinazione()+";"+getPeso()+";"

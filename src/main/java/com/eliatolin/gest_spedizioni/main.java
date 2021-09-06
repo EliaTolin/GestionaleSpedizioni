@@ -1,4 +1,5 @@
 package com.eliatolin.gest_spedizioni;
+import com.eliatolin.gest_spedizioni.screens.TabellaSpedizioni;
 import com.eliatolin.gest_spedizioni.screens.*;
 
 import javax.swing.*;
@@ -44,9 +45,9 @@ class Gestionale
 //                System.out.println("Accss");
 //            else
 //                System.out.println("Not accss");
-            Utente us = new Utente("pro","dw","via pawicc");
+            Utente us = new Utente("1","dw","via pawicc");
             ListaUtenti ls = DataUtility.getListaUtenti();
-            TabellaSpedizioni ts = new TabellaSpedizioni(ls);
+            TabellaSpedizioni ts = new TabellaSpedizioni(us,ls);
             ts.setVisible(true);
             //WelcomeScreen ws = new WelcomeScreen();
             //ws.setVisible(true);

@@ -8,10 +8,10 @@ public class ListaUtenti implements Serializable {
 
     private List<Utente> Utenti;
 
-    public ListaUtenti(){
+    public ListaUtenti() {
         Utenti = new ArrayList<Utente>();
     }
-    
+
     public void Add(Utente s) {
         Utenti.add(s);
     }
@@ -20,8 +20,17 @@ public class ListaUtenti implements Serializable {
         Utenti.remove(s);
     }
 
-    public Utente getUtente(int index) {
+    public Utente getUtenteFromIdx(int index) {
         return Utenti.get(index);
+    }
+
+    public Utente getUtenteFromName(String nome) {
+        for (int i = 0; i < getNumeroUtenti(); i++) {
+            Utente tmp = getUtenteFromIdx(i);
+            if (tmp.getNomeUtente().equals(nome))
+                return tmp;
+        }
+        return null;
     }
 
     public int getNumeroUtenti() {

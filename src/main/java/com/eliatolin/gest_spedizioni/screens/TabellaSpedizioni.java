@@ -5,43 +5,40 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import com.eliatolin.gest_spedizioni.models.*;
+import com.eliatolin.gest_spedizioni.models.LayoutCelle;
+import com.eliatolin.gest_spedizioni.models.ListaSpedizioni;
+import com.eliatolin.gest_spedizioni.models.ListaUtenti;
+import com.eliatolin.gest_spedizioni.models.Spedizione;
+import com.eliatolin.gest_spedizioni.models.SpedizioniTableModel;
+import com.eliatolin.gest_spedizioni.models.Utente;
+import com.eliatolin.gest_spedizioni.utils.DataUtility;
+import com.eliatolin.gest_spedizioni.utils.ThreadSpedizioniCasuali;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 
-//import tabella.LayoutCelle;
-//import thread.ThreadSpedizioni;
-
-
-
-/**
- * Classe che implementa il frame in cui visualizzo in formato tabellare le spedizioni
- */
-public  class TabellaSpedizioni extends JFrame implements ActionListener{
+public class TabellaSpedizioni extends JFrame implements ActionListener,WindowListener {
 
     private ListaUtenti lstUtenti;
     private ListaSpedizioni lstSpedizioni;
     private Utente user;
-    private boolean admin;
-    private boolean modifiche;
-    private JLabel ImmagineUtente;
-    private JLabel MessaggioUtente;
-    private JLabel NomeUtente;
-    private JLabel MessaggioAdmin;
+    private boolean is_administrator;
+    private boolean enable_modify;
 
-    private JButton Indietro;
-    private JButton CancellaFinale;
-    private JButton StartModifiche;
-    private JButton Rimborso;
+    private JButton btnIndietro;
+    private JButton btnRimuovi;
+    private JButton btnStartModify;
+    private JButton btnRefund;
 
-    private JPanel PannelloNord, PannelloCentro, PannelloSud;
+    private JPanel PannelloCentro, PannelloSud;
     private JPanel PannelloTabella;
 
-    private JTable t;
+    private JTable table;
     private SpedizioniTableModel tablemodel;
 
+    private boolean enableModify = false;
     
-    public TabellaSpedizioni(){
-        setSize(600,600);
-        PannelloNord = new JPanel();
+    public TabellaSpedizioni() {
+        setSize(600, 600);
         PannelloCentro = new JPanel();
         PannelloSud = new JPanel();
         PannelloTabella = new JPanel();
@@ -49,218 +46,182 @@ public  class TabellaSpedizioni extends JFrame implements ActionListener{
 
         //Icon Image = new ImageIcon(getClass().getResource("immagineutente.jpg"));
         //ImmagineUtente = new JLabel(Image);
-        NomeUtente = new JLabel(" ");
-        MessaggioUtente = new JLabel("se una spedizione assicurata fallisce puoi richiedere il rimborso con il pulsante rimborso");
+        //NomeUtente = new JLabel(" ");
 
-        MessaggioAdmin = new JLabel("Premi Modifica per modificare le spedizioni degli utenti " +"\n"+
-                "premi Rimuovi per canellare le spedizioni in stato finale ");
+        btnIndietro = new JButton("Indietro");
+        btnIndietro.addActionListener(this);
+        btnRefund = new JButton("Rimborso");
+        btnRefund.addActionListener(this);
 
+        btnRimuovi = new JButton("Rimuovi");
+        btnRimuovi.addActionListener(this);
+        btnStartModify = new JButton("Modifica");
+        btnStartModify.addActionListener(this);
 
-        Indietro = new JButton("Indietro");
-        Indietro.addActionListener(this);
-        Rimborso = new JButton("Rimborso");
-        Rimborso.addActionListener(this);
+        enableModify =false;
 
-        CancellaFinale = new JButton("Rimuovi");
-        CancellaFinale.addActionListener(this);
-        StartModifiche = new JButton ("Modifica");
-        StartModifiche.addActionListener(this);
-
-        setModifiche(false);
-
-        PannelloTabella.add(PannelloNord, BorderLayout.NORTH);
         PannelloTabella.add(PannelloCentro, BorderLayout.CENTER);
         PannelloTabella.add(PannelloSud, BorderLayout.SOUTH);
     }
 
-    /**
-     * metodo costruttore del frame tabella per un user
-     * @param u user loggato che sta visualizzando le sue spedizioni
-     * @param l lista di utenti a cui appartiene l' user u
-     */
-    public TabellaSpedizioni (Utente u, ListaUtenti l){
+    public TabellaSpedizioni(Utente u, ListaUtenti l) {
         this();
         user = u;
         lstUtenti = l;
         setAdmin(false);
 
-        PannelloNord.add(ImmagineUtente);
-        PannelloNord.add(NomeUtente);
-        PannelloNord.add(MessaggioUtente);
-
         tablemodel = new SpedizioniTableModel(user.getListaSpedizioni());
-        t = new JTable(tablemodel);
-        t.setDefaultRenderer(Object.class, new LayoutCelle());
-        t.setPreferredScrollableViewportSize(t.getPreferredSize());
-        JScrollPane scrollpane = new JScrollPane(t);
+        table = new JTable(tablemodel);
+        table.setDefaultRenderer(Object.class, new LayoutCelle());
+        table.setPreferredScrollableViewportSize(table.getPreferredSize());
+        JScrollPane scrollpane = new JScrollPane(table);
         PannelloCentro.add(scrollpane);
 
-        PannelloSud.add(Indietro);
-        PannelloSud.add(Rimborso);
+        PannelloSud.add(btnIndietro);
+        PannelloSud.add(btnRefund);
 
         this.add(PannelloTabella);
     }
 
-
-    /**
-     * metodo costruttore del frame tabella per l'amministratore
-     * @param l lista degli utenti registati
-     */
-    public TabellaSpedizioni(ListaUtenti l){
+    public TabellaSpedizioni(ListaUtenti l) {
         this();
         lstUtenti = l;
         setAdmin(true);
 
-        PannelloNord.add(MessaggioAdmin);
-
         //creo una lista di spedizioni non di un solo user ma di tutti gli utenti presenti nella lista di utenti
         lstSpedizioni = new ListaSpedizioni();
-        for (int i=0; i<l.getNumeroUtenti(); i++){
-            Utente u = l.getUtente(i);
+        for (int i = 0; i < l.getNumeroUtenti(); i++) {
+            Utente u = l.getUtenteFromIdx(i);
             ListaSpedizioni tmp = u.getListaSpedizioni();
-            for (int j=0; j<tmp.getNumeroSpedizioni(); j++)
+            for (int j = 0; j < tmp.getNumeroSpedizioni(); j++) {
                 lstSpedizioni.Add(tmp.getSpedizione(j));
+            }
         }
 
         tablemodel = new SpedizioniTableModel(lstSpedizioni);
-        t = new JTable(tablemodel);
-        t.setDefaultRenderer(Object.class, new LayoutCelle());
-        t.setPreferredScrollableViewportSize(t.getPreferredSize());
-        JScrollPane scrollPane = new JScrollPane(t);
+        table = new JTable(tablemodel);
+        table.setDefaultRenderer(Object.class, new LayoutCelle());
+        table.setPreferredScrollableViewportSize(table.getPreferredSize());
+        JScrollPane scrollPane = new JScrollPane(table);
         PannelloCentro.add(scrollPane);
 
-        PannelloSud.add(Indietro);
-        PannelloSud.add(CancellaFinale);
-        PannelloSud.add(StartModifiche);
+        PannelloSud.add(btnIndietro);
+        PannelloSud.add(btnRimuovi);
+        PannelloSud.add(btnStartModify);
 
         this.add(PannelloTabella);
     }
 
-    /**
-     * metodo che uso per verificare se sono amministratore o user
-     * @return true se sono amministratore, false se sono user
-     */
-    public boolean isAdmin() { return admin; }
+    public boolean isAdmin() {
+        return is_administrator;
+    }
 
+    public void setAdmin(boolean admin) {
+        this.is_administrator = admin;
+    }
 
-    /**
-     * metodo che uso nel costruttore dei frame per decidere se sono l'amministratore o
- se sono un user
-     * @param admin booleano che decide se sono admi o user
-     */
-    public void setAdmin ( boolean admin){ this.admin = admin; }
-
-    /**
-     * metodo che uso per decidere se creare o non create Thread che modificano le spedizioni
-     * @return true se voglio modificare le spedizioni, false altrimenti
-     */
-    public boolean isModifiche() { return modifiche; }
-
-    /**
-     * metodo per settare/resettare la variabile che crea/arresta la crazione di Thread per
-     * le modifiche delle spedizioni
-     * @param modifiche stato della richiesta di modifiche /stop modifiche
-     */
-    public void setModifiche(boolean modifiche) { this.modifiche = modifiche;}
-
+//    public boolean isModifiche() {
+//        return enable_modify;
+//    }
+//
+//    public void setModifiche(boolean modifiche) {
+//        this.enable_modify = modifiche;
+//    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String Scelta = e.getActionCommand();
-
-        if (Scelta.equals("Indietro")){
-/*
-            if (isAdmin()){
-                lstUtenti.SalvaLista();
-                CambiaSchermata(new FrameIniziale(), this);
-
-            }
-            else {
-                lstUtenti.SalvaLista();
-                CambiaSchermata(new FrameUtenteLoggato(lstUtenti, user), this);
-            }
-            */
+        if (e.getSource() == btnIndietro) {
+            DataUtility.salvaInfoUtenti(lstUtenti);
+            WelcomeScreen ws = new WelcomeScreen();
+            ws.setVisible(true);
+            this.dispose();
         }
 
-        /*
-        seleziono una spedizione, se posso richiedere il rimborso modifico il suo stato,
-        altimenti segnalo un messaggio di errore e non faccio niente
-         */
-        /*
-        if (Scelta.equals("Rimborso")){
-            ListaSpedizioni sped = user.getSpedizioni();
-            int numrimborsi = 0;
-
-            for (int i=0; i<t.getRowCount(); i++){
-                Spedizione s = sped.get(i);
-                if (s.PossibileRimborso()) {
-                    t.setValueAt("RICHIESTA RIMBORSO", i, 5);
-                    numrimborsi++;
+        if (e.getSource() == btnRefund) {
+            ListaSpedizioni sped = user.getListaSpedizioni();
+            boolean rimborso_richiesto = false;
+            for (int i = 0; i < table.getRowCount(); i++) {
+                Spedizione s = sped.getSpedizione(i);
+                if (s.CheckRimborso()) {
+                    table.setValueAt("RIMBORSO_RICHIESTO", i, 5);
+                    rimborso_richiesto = true;
                 }
             }
-            if (numrimborsi == 0)
-                JOptionPane.showMessageDialog(this, "Nessun rimborso richiesto ", "", JOptionPane.INFORMATION_MESSAGE);
-            else
-                JOptionPane.showMessageDialog(this, "richiesti "+numrimborsi+" rimborsi", "", JOptionPane.INFORMATION_MESSAGE);
+            if(!rimborso_richiesto)
+                JOptionPane.showMessageDialog(null, "Nessun rimborso richiesto", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
 
-        /*
-          seleziono una spedizione da rimuovere, se è in uno stato finale la cancello, alrimenti
-          segnalo un errore e non faccio niente
-         */
-        /*
-        if (Scelta.equals("Rimuovi")){
-            ListaSpedizioni sped = tablemodel.getLista();
-            Spedizione s = sped.get(t.getSelectedRow());
+        if (e.getSource() == btnRimuovi) {
+            ListaSpedizioni lstSped = tablemodel.getLista();
+            Spedizione s = lstSped.getSpedizione(table.getSelectedRow());
 
-            if (s.StatoFinale()){
+            if (s.SpedizioneTerminata()) {
 
-                String nome = s.getNomeUtente();
-                Utente u = lstUtenti.TrovaUtente(nome);
-                ListaSpedizioni ListaSpedUtente = u.getSpedizioni();
+                String nome = s.getUtente();
+                Utente u = lstUtenti.getUtenteFromName(nome);
+                if(u == null)
+                    return;
+                ListaSpedizioni ls = u.getListaSpedizioni();
 
-                ListaSpedUtente.Cancella(s);
-                u.dec();
-                sped.Cancella(sped.get(t.getSelectedRow()));
+                ls.Remove(s);
+                lstSped.Remove(lstSped.getSpedizione(table.getSelectedRow()));
+                JOptionPane.showMessageDialog(this, "La spedizione selezionata "
+                        + "è stata eliminata", "", JOptionPane.INFORMATION_MESSAGE);
                 tablemodel.fireTableDataChanged();
-                JOptionPane.showMessageDialog(this, "Spedizione eliminata ","", JOptionPane.INFORMATION_MESSAGE);
 
+            } else {
+                JOptionPane.showMessageDialog(this, "Non è possibile cancellare"
+                        + " la spedizione perchè non è terminata", "", JOptionPane.INFORMATION_MESSAGE);
             }
-            else
-                JOptionPane.showMessageDialog(this, "Spedizione non in stato finale", "", JOptionPane.ERROR_MESSAGE);
-            //listautenti.SalvaLista();
+            DataUtility.salvaInfoUtenti(lstUtenti);
         }
-        */
-        /*
-         se scelgo di modificare le spedizioni, creo e faccio partire i Thread delle modifiche
-         fino a che non premo nuovamente il pulsante modifica
-         */
-        /*
-        if (Scelta.equals("Modifica")) {
 
-            setModifiche(!isModifiche());
+        if (e.getSource() == btnStartModify) {
+            enableModify = !enableModify;
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
                     Thread t = new Thread();
 
-                    while (isModifiche()) {
-                        t = new ThreadSpedizioni(tablemodel);
+                    while (enableModify) {
+                        t = new ThreadSpedizioniCasuali(tablemodel);
                         t.start();
 
-                        try {Thread.sleep(4000); } catch (InterruptedException e) {e.printStackTrace(); }
+                        try {
+                            Thread.sleep(4000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         t.interrupt();
                     }
                 }
             };
             new Thread(r).start();
         }
-        */
+
     }
-    /*
+
     @Override
     public void windowClosing(WindowEvent e) {
-        lstUtenti.SalvaLista();
+        DataUtility.salvaInfoUtenti(lstUtenti);
         System.exit(0);
-    }*/
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {}
+
+    @Override
+    public void windowClosed(WindowEvent e) {}
+
+    @Override
+    public void windowIconified(WindowEvent e) {}
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {}
+
+    @Override
+    public void windowActivated(WindowEvent e) {}
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {}
 }
