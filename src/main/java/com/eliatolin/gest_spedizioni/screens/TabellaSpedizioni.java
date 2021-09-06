@@ -88,7 +88,6 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
         lstUtenti = l;
         setAdmin(true);
 
-        //creo una lista di spedizioni non di un solo user ma di tutti gli utenti presenti nella lista di utenti
         lstSpedizioni = new ListaSpedizioni();
         for (int i = 0; i < l.getNumeroUtenti(); i++) {
             Utente u = l.getUtenteFromIdx(i);

@@ -33,7 +33,7 @@ public class LayoutCelle extends DefaultTableCellRenderer {
                 setBackground(Color.MAGENTA);
                 break;
             }
-            case "RICEVUTO": {
+            case "RICEVUTA": {
                 setBackground(Color.GREEN);
                 break;
             }

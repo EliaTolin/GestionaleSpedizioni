@@ -119,6 +119,38 @@ public abstract class DataUtility {
         return false;
     }
 
+    public static Utente getUtente(String username) {
+        File in_file;
+        FileReader f;
+        BufferedReader b;
+
+        try {
+            in_file = new File(file_user);
+            if (!in_file.exists()) {
+                return null;
+            }
+
+            f = new FileReader(file_user);
+            b = new BufferedReader(f);
+            while (true) {
+                String s_tmp;
+                s_tmp = b.readLine();
+                if (s_tmp == null) {
+                    return null;
+                }
+                String[] line = s_tmp.split(";");
+                if (line[0].equals(username)) {
+                    Utente u = new Utente(line[0],line[1],line[2]);
+                    return u;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error - Utente registrato");
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
     public static ListaSpedizioni getSpedizioniUtente(String username) {
         File in_file;
         FileReader f;
@@ -253,11 +285,18 @@ public abstract class DataUtility {
         }
     }
     
-    public static boolean salvaInfoUtenti(ListaUtenti lista)
+    private static void clearFile(String file) throws FileNotFoundException
+    {
+        PrintWriter writer = new PrintWriter(file);
+        writer.print("");
+        writer.close();
+    }
+    
+    public static void salvaInfoUtenti(ListaUtenti lista)
     {
         for(int i = 0; i < lista.getNumeroUtenti();i++ )
         {
-            Utente us = lista.getUtenteIdx(i);
+            Utente us = lista.getUtenteFromIdx(i);
             DataUtility.inserisciUtente(us);
             ListaSpedizioni ls = us.getListaSpedizioni();
             for(int y = 0; y < ls.getNumeroSpedizioni(); y++)

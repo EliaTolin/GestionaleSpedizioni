@@ -45,12 +45,12 @@ class Gestionale
 //                System.out.println("Accss");
 //            else
 //                System.out.println("Not accss");
-            Utente us = new Utente("1","dw","via pawicc");
-            ListaUtenti ls = DataUtility.getListaUtenti();
-            TabellaSpedizioni ts = new TabellaSpedizioni(us,ls);
-            ts.setVisible(true);
-            //WelcomeScreen ws = new WelcomeScreen();
-            //ws.setVisible(true);
+            //Utente us = new Utente("1","dw","via pawicc");
+            //ListaUtenti ls = DataUtility.getListaUtenti();
+            //TabellaSpedizioni ts = new TabellaSpedizioni(us,ls);
+            //ts.setVisible(true);
+            WelcomeScreen ws = new WelcomeScreen();
+            ws.setVisible(true);
             
         }  
         catch(Exception e)  

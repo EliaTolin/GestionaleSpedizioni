@@ -1,6 +1,7 @@
 package com.eliatolin.gest_spedizioni.screens;
 
 //importazione classi e pacchetti richiesti
+import com.eliatolin.gest_spedizioni.models.ListaUtenti;
 import javax.swing.*;  
 import java.awt.*;  
 import java.awt.event.*;  
@@ -16,7 +17,7 @@ public class LoginForm extends JFrame implements ActionListener
     JPanel newPanel;  
     JLabel userLabel, passLabel;  
     final JTextField  txtFieldUsername, txtFieldPassword;  
-    
+    boolean admin = false;
     //costruttore
     public LoginForm(String type)  
     {   
@@ -55,12 +56,14 @@ public class LoginForm extends JFrame implements ActionListener
         {
             registration = new JButton("REGISTRAZIONE");
             newPanel.add(registration);
+            registration.addActionListener(this);
             this.setTitle("LOGIN UTENTE");
-            access.addActionListener(this);
+            admin = false;
         }
         else
         {
             this.setTitle("LOGIN AMMINISTRATORE");
+            admin = true;
         }
 
         //aggiungo border 
@@ -68,7 +71,6 @@ public class LoginForm extends JFrame implements ActionListener
           
         //attacco l'evento
         access.addActionListener(this);
-        registration.addActionListener(this);
         setTitle("LOGIN FORM");
     }
     
@@ -90,6 +92,21 @@ public class LoginForm extends JFrame implements ActionListener
             if(username.length() == 0 || password.length() == 0)
                 return;
             
+            if(admin)
+            {
+                if(username.equals("admin") && password.equals("admin"))
+                {
+                    ListaUtenti lstUtenti = DataUtility.getListaUtenti();
+                    TabellaSpedizioni tb = new TabellaSpedizioni(lstUtenti);
+                    tb.setVisible(true);
+                    this.dispose();
+                }
+            }
+            else
+            {
+                Utente u = DataUtility.getUtente(username);
+                MenuUtente menu = new MenuUtente(u);
+            }
         }
         else if (ae.getSource() == registration)
         {
