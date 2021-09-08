@@ -12,31 +12,33 @@ import java.util.Date;
 
 public class SpedizioneAssicurata extends Spedizione{
     
-    private float valoreAssicurato = 0;
+    private final float valoreAssicurato;
     
-    public SpedizioneAssicurata(String user,String id, int peso, Date data, String destinazione, 
+    public SpedizioneAssicurata(String user, float peso, Date data, String destinazione, 
             String stato, float valoreAssicurato){
-        super(user,id,peso,data,destinazione);
+        super(user,peso,data,destinazione);
         setStato(stato);
-        setValoreAssicurato(valoreAssicurato);
-    }
-    
-    public void setValoreAssicurato(float valoreAssicurato) {
         this.valoreAssicurato = valoreAssicurato;
     }
     
+    public SpedizioneAssicurata(String user, float peso, Date data, String destinazione, 
+            float valoreAssicurato){
+        super(user,peso,data,destinazione);
+        this.valoreAssicurato = valoreAssicurato;
+    }
+    
+    @Override
     public void aggiornaStato()
     {
         super.aggiornaStato();
-        if(stato=="RIMBORSO_RICHIESTO")
+        if("RIMBORSO_RICHIESTO".equals(stato))
             setStato("RIMBORSO_EROGATO");
     }
     
+    @Override
     public boolean CheckRimborso()
     {
-        if(this.getStato().equals("FALLITA"))
-            return true;
-        return false;
+        return this.getStato().equals("FALLITA");
     }
     
     @Override

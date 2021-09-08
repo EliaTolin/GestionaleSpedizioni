@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ListaSpedizioni implements Serializable {
 
-    private List<Spedizione> Spedizioni;
+    private final List<Spedizione> Spedizioni;
 
     public ListaSpedizioni() {
         Spedizioni = new ArrayList<Spedizione>();

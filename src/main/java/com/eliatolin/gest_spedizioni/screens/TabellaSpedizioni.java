@@ -16,7 +16,7 @@ import com.eliatolin.gest_spedizioni.utils.ThreadSpedizioniCasuali;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowListener;
 
-public class TabellaSpedizioni extends JFrame implements ActionListener,WindowListener {
+public class TabellaSpedizioni extends JFrame implements ActionListener, WindowListener {
 
     private ListaUtenti lstUtenti;
     private ListaSpedizioni lstSpedizioni;
@@ -36,17 +36,13 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
     private SpedizioniTableModel tablemodel;
 
     private boolean enableModify = false;
-    
+
     public TabellaSpedizioni() {
         setSize(600, 600);
         PannelloCentro = new JPanel();
         PannelloSud = new JPanel();
         PannelloTabella = new JPanel();
         PannelloTabella.setLayout(new BorderLayout());
-
-        //Icon Image = new ImageIcon(getClass().getResource("immagineutente.jpg"));
-        //ImmagineUtente = new JLabel(Image);
-        //NomeUtente = new JLabel(" ");
 
         btnIndietro = new JButton("Indietro");
         btnIndietro.addActionListener(this);
@@ -58,7 +54,7 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
         btnStartModify = new JButton("Modifica");
         btnStartModify.addActionListener(this);
 
-        enableModify =false;
+        enableModify = false;
 
         PannelloTabella.add(PannelloCentro, BorderLayout.CENTER);
         PannelloTabella.add(PannelloSud, BorderLayout.SOUTH);
@@ -119,14 +115,6 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
         this.is_administrator = admin;
     }
 
-//    public boolean isModifiche() {
-//        return enable_modify;
-//    }
-//
-//    public void setModifiche(boolean modifiche) {
-//        this.enable_modify = modifiche;
-//    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnIndietro) {
@@ -146,8 +134,11 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
                     rimborso_richiesto = true;
                 }
             }
-            if(!rimborso_richiesto)
+            if (!rimborso_richiesto) {
                 JOptionPane.showMessageDialog(null, "Nessun rimborso richiesto", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                DataUtility.salvaInfoUtenti(lstUtenti);
+            }
         }
 
         if (e.getSource() == btnRimuovi) {
@@ -158,8 +149,9 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
 
                 String nome = s.getUtente();
                 Utente u = lstUtenti.getUtenteFromName(nome);
-                if(u == null)
+                if (u == null) {
                     return;
+                }
                 ListaSpedizioni ls = u.getListaSpedizioni();
 
                 ls.Remove(s);
@@ -167,12 +159,12 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
                 JOptionPane.showMessageDialog(this, "La spedizione selezionata "
                         + "è stata eliminata", "", JOptionPane.INFORMATION_MESSAGE);
                 tablemodel.fireTableDataChanged();
+                DataUtility.salvaInfoUtenti(lstUtenti);
 
             } else {
                 JOptionPane.showMessageDialog(this, "Non è possibile cancellare"
                         + " la spedizione perchè non è terminata", "", JOptionPane.INFORMATION_MESSAGE);
             }
-            DataUtility.salvaInfoUtenti(lstUtenti);
         }
 
         if (e.getSource() == btnStartModify) {
@@ -185,7 +177,6 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
                     while (enableModify) {
                         t = new ThreadSpedizioniCasuali(tablemodel);
                         t.start();
-
                         try {
                             Thread.sleep(4000);
                         } catch (InterruptedException e) {
@@ -196,6 +187,8 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
                 }
             };
             new Thread(r).start();
+            DataUtility.salvaInfoUtenti(lstUtenti);
+
         }
 
     }
@@ -207,20 +200,26 @@ public class TabellaSpedizioni extends JFrame implements ActionListener,WindowLi
     }
 
     @Override
-    public void windowOpened(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {
+    }
 
     @Override
-    public void windowClosed(WindowEvent e) {}
+    public void windowClosed(WindowEvent e) {
+    }
 
     @Override
-    public void windowIconified(WindowEvent e) {}
+    public void windowIconified(WindowEvent e) {
+    }
 
     @Override
-    public void windowDeiconified(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e) {
+    }
 
     @Override
-    public void windowActivated(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {
+    }
 
     @Override
-    public void windowDeactivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {
+    }
 }

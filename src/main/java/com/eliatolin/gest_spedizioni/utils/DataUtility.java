@@ -6,6 +6,7 @@ import com.eliatolin.gest_spedizioni.models.SpedizioneAssicurata;
 import com.eliatolin.gest_spedizioni.models.ListaSpedizioni;
 import com.eliatolin.gest_spedizioni.models.ListaUtenti;
 import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,12 +21,11 @@ public abstract class DataUtility {
             if (!out_file.exists()) {
                 out_file.createNewFile();
             }
-            FileWriter fw = new FileWriter(out_file, true);
-            fw.write(value);
-            fw.write("\n");
-            fw.close();
+            try (FileWriter fw = new FileWriter(out_file, true)) {
+                fw.write(value);
+                fw.write("\n");
+            }
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
         return true;
@@ -67,7 +67,6 @@ public abstract class DataUtility {
             }
         } catch (IOException e) {
             System.err.println("Error - Verifica accesso");
-            e.printStackTrace();
             return false;
         }
     }
@@ -98,12 +97,12 @@ public abstract class DataUtility {
             }
         } catch (IOException e) {
             System.err.println("Error - Utente registrato");
-            e.printStackTrace();
             return false;
         }
     }
 
     public static boolean salvaSpedizione(Spedizione sp) {
+        
         if (saveInformation(file_ship, sp.toString())) {
             return true;
         }
@@ -112,6 +111,7 @@ public abstract class DataUtility {
     }
 
     public static boolean salvaSpedizione(SpedizioneAssicurata sp) {
+       
         if (saveInformation(file_ship, sp.toString())) {
             return true;
         }
@@ -146,7 +146,6 @@ public abstract class DataUtility {
             }
         } catch (IOException e) {
             System.err.println("Error - Utente registrato");
-            e.printStackTrace();
             return null;
         }
     }
@@ -173,21 +172,21 @@ public abstract class DataUtility {
                 String[] line = s_tmp.split(";");
                 if (line[0].equals(username)) {
                     String user, id, dest, strDate, v_ass, stato;
-                    int peso;
+                    Float peso;
                     user = line[0];
                     id = line[1];
                     dest = line[2];
-                    peso = Integer.parseInt(line[3]);
+                    peso = Float.parseFloat(line[3]);
                     strDate = line[4];
                     stato = line[5];
                     Date date = new SimpleDateFormat("dd-mm-yyyy").parse(strDate);
                     Spedizione s;
                     if (line.length != 6) {
                         v_ass = line[6];
-                        s = new SpedizioneAssicurata(user, id, peso, date, dest,
+                        s = new SpedizioneAssicurata(user,peso, date, dest,
                                 stato, Float.parseFloat(v_ass));
                     } else {
-                        s = new Spedizione(user, id, peso, date, dest,
+                        s = new Spedizione(user, peso, date, dest,
                                 stato);
                     }
                     lst.Add(s);
@@ -232,18 +231,17 @@ public abstract class DataUtility {
                 Spedizione s;
                 if (line.length != 6) {
                     v_ass = line[6];
-                    s = new SpedizioneAssicurata(user, id, Integer.getInteger(peso), date, dest,
+                    s = new SpedizioneAssicurata(user, Float.parseFloat(peso), date, dest,
                             stato, Float.parseFloat(v_ass));
                 } else {
-                    s = new Spedizione(user, id, Integer.getInteger(peso), date, dest,
+                    s = new Spedizione(user, Float.parseFloat(peso), date, dest,
                             stato);
                 }
                 lst.Add(s);
             }
             return lst;
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException | ParseException e) {
             System.err.println("Error - Get spedizioni");
-            e.printStackTrace();
             return new ListaSpedizioni();
         }
     }
@@ -278,18 +276,17 @@ public abstract class DataUtility {
                 lst.Add(u);
             }
             return lst;
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Error - Get Lista Utenti");
-            e.printStackTrace();
             return new ListaUtenti();
         }
     }
     
     private static void clearFile(String file) throws FileNotFoundException
     {
-        PrintWriter writer = new PrintWriter(file);
-        writer.print("");
-        writer.close();
+        try (PrintWriter writer = new PrintWriter(file)) {
+            writer.print("");
+        }
     }
     
     public static void salvaInfoUtenti(ListaUtenti lista)
@@ -306,100 +303,3 @@ public abstract class DataUtility {
         }
     }
 }
-
-/**
- * Salva le spedizioni all'interno del sistema.
- *
- * @param dashboard Dashboard di riferimento da cui estrarre le spedizioni.
- * @return boolean //
- */
-//public static boolean saveSpedizioni(Dashboard dashboard){
-//        File out;
-//        FileWriter fw;
-//        //Provo a scrivere il file delle spedizioni
-//        try {
-//            out = new File("com/dariovarriale/data/spedizioni.txt");
-//            fw = new FileWriter(out);
-//        } catch(IOException e) {
-//            System.err.println("Errore nella creazione del file");
-//            e.printStackTrace();
-//            return false;
-//        }
-//
-//        try {
-//            StringBuilder s = new StringBuilder();
-//            for(Spedizione sped : dashboard.getSpedizioni()) s.append(sped.toString());
-//
-//            fw.write(s.toString());
-//            fw.close();
-//        } catch(IOException e) {
-//            System.err.println("Errore nella srittura su file");
-//            e.printStackTrace();
-//            return false;
-//        }
-//
-//        return true;
-//    }
-//
-//    /**
-//     * Controlla se c'è un utente che non ha effettuato il logout, in modo da permettergli di fare un
-//     * accesso veloce alla dashboard. In caso positivo ritorna lo username dell'utente.
-//     *
-//     * @return String
-//     */
-//    public static String getLog(){
-//        InputStreamReader in;
-//        BufferedReader b;
-//        File f;
-//        //Provo a leggere l'ultimo utente loggato
-//        try{
-//            f = new File("com/dariovarriale/data/lastLogged.txt");
-//            if(!f.exists()) return null;
-//
-//            in = new InputStreamReader(new FileInputStream(f));
-//            b = new BufferedReader(in);
-//
-//            String s = b.readLine();
-//
-//            if(s != null){
-//                return s;
-//            }
-//
-//        } catch(IOException e){
-//            System.err.println("Errore nell'apertura del file");
-//            e.printStackTrace();
-//            return null;
-//        }
-//        //In caso di errori ritorna null
-//        return null;
-//    }
-//
-//    /**
-//     * Salva lo username dell'ultimo utente che non ha effettuato il logout.
-//     *
-//     * @param username Username dell'utente da salvare.
-//     * @return boolean
-//     */
-//    public static boolean saveLog(String username){
-//        File out;
-//        FileWriter fw;
-//        //Provo a scrivere l'utente che non ha effettuato il logout
-//        try {
-//            out = new File("com/dariovarriale/data/lastLogged.txt");
-//            fw = new FileWriter(out);
-//        } catch(IOException e) {
-//            System.err.println("Errore nella creazione del file");
-//            e.printStackTrace();
-//            return false;
-//        }
-//        try {
-//            fw.write(username);
-//            fw.close();
-//        } catch(IOException e) {
-//            System.err.println("Errore nella srittura su file");
-//            e.printStackTrace();
-//            return false;
-//        }
-//        return true;
-//    }
-//}

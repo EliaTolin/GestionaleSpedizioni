@@ -1,7 +1,9 @@
 package com.eliatolin.gest_spedizioni.models;
+
 import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.Date;
+
 /**
  *
  * @author eliatolin
@@ -11,42 +13,43 @@ import java.util.Date;
  * @author eliatolin
  */
 
-public class Spedizione{
+public class Spedizione {
+
     protected final String user;
     protected final String id;
     protected final String destinazione;
-    protected final int peso;
+    protected final float peso;
     protected String stato;
     protected final Date date;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
-    
-    public Spedizione(String user,String id, int peso, Date data, String destinazione){
+
+    public Spedizione(String user, float peso, Date data, String destinazione) {
         this.user = user;
-        this.id = id;
+        this.id = getCasualId(user);
         this.peso = peso;
         this.date = data;
         this.destinazione = destinazione;
         this.stato = "IN_PREPARAZIONE";
     }
-    
-    public Spedizione(String user,String id, int peso, Date data, String destinazione, 
-            String stato){
+
+    public Spedizione(String user, float peso, Date data, String destinazione,
+            String stato) {
         this.user = user;
-        this.id = id;
+        this.id = getCasualId(user);
         this.peso = peso;
         this.date = data;
         this.destinazione = destinazione;
         this.stato = stato;
     }
-    
-    public void aggiornaStato(){
-        switch(this.stato){
+
+    public void aggiornaStato() {
+        switch (this.stato) {
             case "IN_PREPARAZIONE":
                 this.stato = "IN_TRANSITO";
                 break;
             case "IN_TRANSITO":
                 Random rand = new Random();
-                if(1 == rand.nextInt(3)) {
+                if (1 == rand.nextInt(3)) {
                     this.stato = "FALLITA";
                     break;
                 }
@@ -56,13 +59,12 @@ public class Spedizione{
                 break;
         }
     }
-    
-    public void setStato(String stato){
+
+    public void setStato(String stato) {
         this.stato = stato;
     }
 
-    
-    public String getStato(){
+    public String getStato() {
         return this.stato;
     }
 
@@ -74,44 +76,43 @@ public class Spedizione{
         return destinazione;
     }
 
-    public int getPeso() {
+    public float getPeso() {
         return peso;
     }
 
     public Date getDate() {
         return date;
     }
-    
-    public String getDateToString()
-    {
+
+    public String getDateToString() {
         return sdf.format(date);
     }
-    
-    public String getUtente()
-    {
+
+    public String getUtente() {
         return user;
     }
-    
-    public float getValoreAssicurato()
-    {
+
+    public float getValoreAssicurato() {
         return 0;
     }
-    
-    public boolean CheckRimborso()
-    {
+
+    public boolean CheckRimborso() {
         return false;
     }
-    
-    public boolean SpedizioneTerminata()
-    {
-        return (getStato() == "FALLITA" || getStato() == "RICEVUTA")?
-                true:false;
+
+    public boolean SpedizioneTerminata() {
+        return getStato().equals("FALLITA") || getStato().equals("RICEVUTA");
     }
-    
+
+    public String getCasualId(String value) {
+        long unixTime = System.currentTimeMillis() / 1000L;
+        return "IT" + value.toUpperCase()
+                + String.valueOf(unixTime);
+    }
+
     @Override
     public String toString() {
-        return getUtente()+";"+getId() + ";"+ getDestinazione() + ";" + getPeso() + ";" +
-                getDateToString() +";"+getStato()+";";
+        return getUtente() + ";" + getId() + ";" + getDestinazione() + ";" + getPeso() + ";"
+                + getDateToString() + ";" + getStato() + ";";
     }
 }
-

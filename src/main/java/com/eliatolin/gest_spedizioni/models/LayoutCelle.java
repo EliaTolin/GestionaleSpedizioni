@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class LayoutCelle extends DefaultTableCellRenderer {
 
+    @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -25,33 +26,26 @@ public class LayoutCelle extends DefaultTableCellRenderer {
         String stato = (String)table.getValueAt(row, 5);
         switch (stato) {
 
-            case "IN_PREPARAZIONE": {
+            case "IN_PREPARAZIONE" ->  {
                 setBackground(Color.LIGHT_GRAY);
-                break;
             }
-            case "TRANSITO": {
+            case "TRANSITO" ->  {
                 setBackground(Color.MAGENTA);
-                break;
             }
-            case "RICEVUTA": {
+            case "RICEVUTA" ->  {
                 setBackground(Color.GREEN);
-                break;
             }
-            case "FALLITA": {
+            case "FALLITA" ->  {
                 setBackground(Color.RED);
-                break;
             }
-            case "RIMBORSO_RICHIESTO": {
+            case "RIMBORSO_RICHIESTO" ->  {
                 setBackground(Color.ORANGE);
-                break;
             }
-            case "RIMBORSO_EROGATO": {
+            case "RIMBORSO_EROGATO" ->  {
                 setBackground(Color.CYAN);
-                break;
             }
-            default: {
+            default ->  {
                 setBackground(Color.DARK_GRAY);
-                break;
             }
         }
         this.setHorizontalAlignment(JLabel.CENTER);

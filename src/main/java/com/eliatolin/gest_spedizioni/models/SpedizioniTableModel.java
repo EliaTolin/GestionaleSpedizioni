@@ -14,7 +14,7 @@ import com.eliatolin.gest_spedizioni.models.*;
  */
 public class SpedizioniTableModel extends AbstractTableModel {
 
-    private String[] clmName = {"Nome", "Codice", "Destinazione", "Peso", "Data", "Stato", "Valore Assicurato"};
+    private final String[] clmName = {"Nome", "Codice", "Destinazione", "Peso", "Data", "Stato", "Valore Assicurato"};
 
     private ListaSpedizioni lstSpedizioni;
 
@@ -22,47 +22,41 @@ public class SpedizioniTableModel extends AbstractTableModel {
         this.lstSpedizioni = l;
     }
 
+    @Override
     public int getColumnCount() {
         return clmName.length;
     }
 
+    @Override
     public int getRowCount() {
         return lstSpedizioni.getNumeroSpedizioni();
     }
 
+    @Override
     public Object getValueAt(int row, int col) {
 
         Spedizione ship = lstSpedizioni.getSpedizione(row);
 
-        switch (col) {
-            case 0:
-                return ship.getUtente();
-            case 1:
-                return ship.getId();
-            case 2:
-                return ship.getDestinazione();
-            case 3:
-                return ship.getPeso();
-            case 4:
-                return ship.getDate();
-            case 5:
-                return ship.getStato();
-            case 6:
-                return ship.getValoreAssicurato();
-            default:
-                return null;
-        }
+        return switch (col) {
+            case 0 -> ship.getUtente();
+            case 1 -> ship.getId();
+            case 2 -> ship.getDestinazione();
+            case 3 -> ship.getPeso();
+            case 4 -> ship.getDate();
+            case 5 -> ship.getStato();
+            case 6 -> ship.getValoreAssicurato();
+            default -> null;
+        };
     }
 
+    @Override
     public String getColumnName(int col) {
         return clmName[col];
     }
 
+    @Override
     public boolean isCellEditable(int row, int col) {
-        if (col == 5) {
-            return true;
-        }
-        return false;
+        return col == 5;
     }
 
     @Override

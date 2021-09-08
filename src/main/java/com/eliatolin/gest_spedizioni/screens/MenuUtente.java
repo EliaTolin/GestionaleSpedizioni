@@ -6,12 +6,7 @@ import com.eliatolin.gest_spedizioni.utils.DataUtility;
 import java.awt.*;  
 import java.awt.event.*;   
 import javax.swing.*;
-import java.lang.Exception;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 /**
  *
@@ -25,6 +20,8 @@ public class MenuUtente extends JFrame implements ActionListener{
     JButton jbSpedizione;
     JButton jbSpedAssicurata;
     JButton jbTabella;
+    JButton jbBack;
+    
     Utente user;
     public MenuUtente(Utente u)
     {
@@ -55,10 +52,15 @@ public class MenuUtente extends JFrame implements ActionListener{
         jbTabella.setPreferredSize(dButton);
         jbTabella.addActionListener(this);
         
+        jbBack = new JButton("INDIETRO");
+        jbBack.setPreferredSize(dButton);
+        jbBack.addActionListener(this);
+        
         panel.add(labelWelcome);
         panel.add(jbSpedizione);
         panel.add(jbSpedAssicurata);
         panel.add(jbTabella);
+        panel.add(jbBack);
         add(panel);
         
         setVisible(true);
@@ -69,17 +71,27 @@ public class MenuUtente extends JFrame implements ActionListener{
     { 
          if(ae.getSource() == jbSpedizione)
         {
-            
+            AggiungiSpedizioneForm asForm = new AggiungiSpedizioneForm(user,false);
+            asForm.setVisible(true);
+            this.dispose();
         }
         else if (ae.getSource() == jbSpedAssicurata)
         {
-            
+            AggiungiSpedizioneForm asForm = new AggiungiSpedizioneForm(user,true);
+            asForm.setVisible(true);
+            this.dispose();
         }
         else if(ae.getSource() == jbTabella)
         {
             ListaUtenti lstUtenti = DataUtility.getListaUtenti();
             TabellaSpedizioni tb = new TabellaSpedizioni(user,lstUtenti);
             tb.setVisible(true);
+            this.dispose();
+        }
+        else if(ae.getSource() == jbBack)
+        {
+            LoginForm lf = new LoginForm("user");
+            lf.setVisible(true);
             this.dispose();
         }
     }
