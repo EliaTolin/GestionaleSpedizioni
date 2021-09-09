@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.eliatolin.gest_spedizioni.screens;
+
 import com.eliatolin.gest_spedizioni.models.SpedizioneAssicurata;
 import com.eliatolin.gest_spedizioni.models.Spedizione;
 import javax.swing.*;
@@ -13,6 +14,7 @@ import com.eliatolin.gest_spedizioni.models.Utente;
 import com.eliatolin.gest_spedizioni.utils.DataUtility;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -26,12 +28,13 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
     //inizializzo elementi
     JButton btnAddSpedizione, btnBack;
     JPanel newPanel;
-    JLabel pesoLabel, dataLabel,
-            addressLabel,valoreLabel;
-    JTextField txtFieldPeso, txtFieldData,
-            txtFieldAddress,txtFieldValore;
-    Boolean assicurata; 
+    JLabel pesoLabel,
+            addressLabel, valoreLabel;
+    JTextField txtFieldPeso,
+            txtFieldAddress, txtFieldValore;
+    Boolean assicurata;
     Utente user;
+
     public AggiungiSpedizioneForm(Utente u, Boolean assicurata) {
         setSize(200, 300);
         user = u;
@@ -50,12 +53,6 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
         addressLabel.setText("Indirizzo");      //set label value for txtFieldIndirizzo
         txtFieldAddress = new JTextField(MAX_LEN);
 
-        //creo la textfield per l'inserimento della password 
-        dataLabel = new JLabel();
-        dataLabel.setText("Data");
-        txtFieldData = new JTextField(MAX_LEN);
-        txtFieldData.setText("dd/mm/yyyy");
-
         btnAddSpedizione = new JButton("Aggiungi spedizione");
         btnBack = new JButton("Indietro");
 
@@ -69,13 +66,9 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
         //indirizzo
         newPanel.add(addressLabel);
         newPanel.add(txtFieldAddress);
-        //data
-        newPanel.add(dataLabel);
-        newPanel.add(txtFieldData);
-        
+
         //valore
-        if(assicurata)
-        {
+        if (assicurata) {
             valoreLabel = new JLabel();
             valoreLabel.setText("Valore assicurato");
             txtFieldValore = new JTextField(MAX_LEN);
@@ -101,7 +94,6 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
 
         if (ae.getSource() == btnAddSpedizione) {
             String address = txtFieldAddress.getText();
-            String date = txtFieldData.getText();
             Float peso;
             try {
                 String pesoTmp = txtFieldPeso.getText();
@@ -121,8 +113,8 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            if (address.length() == 0 || date.length() == 0) {
+
+            if (address.length() == 0) {
                 JOptionPane.showMessageDialog(null,
                         "Inserisci tutte le informazioni",
                         "Errore registrazione",
@@ -137,31 +129,30 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            try {  
-                Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(date);
+
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date date1;
+                String dateTmp = sdf.format(new Date());
+                date1 = sdf.parse(dateTmp);
                 Spedizione s;
-                if(assicurata)
-                {
+                if (assicurata) {
                     Float valore = Float.parseFloat(txtFieldValore.getText());
-                    s = new SpedizioneAssicurata(user.getNomeUtente(),peso,date1,address,valore);
+                    s = new SpedizioneAssicurata(user.getNomeUtente(), peso, date1, address, valore);
+                } else {
+                    s = new Spedizione(user.getNomeUtente(), peso, date1, address);
                 }
-                else
-                {
-                    s = new Spedizione(user.getNomeUtente(),peso,date1,address);
-                }
-                
-                if(!DataUtility.salvaSpedizione(s))
-                {
+
+                if (!DataUtility.salvaSpedizione(s)) {
                     JOptionPane.showMessageDialog(null,
-                        "Errore salvataggio spedizione",
-                        "Errore registrazione",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
+                            "Errore salvataggio spedizione",
+                            "Errore registrazione",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                    
+
             } catch (ParseException ex) {
-                 JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(null,
                         "Errore conversione data",
                         "Errore registrazione",
                         JOptionPane.ERROR_MESSAGE);
@@ -170,17 +161,15 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
 
             JOptionPane.showMessageDialog(null,
                     "Registrazione della spedizione "
-                     + " avvenuta con successo",
+                    + " avvenuta con successo",
                     "Conferma registrazione",
                     JOptionPane.INFORMATION_MESSAGE);
-        } 
-        else if (ae.getSource() == btnBack)
-        {
+        } else if (ae.getSource() == btnBack) {
             MenuUtente menu = new MenuUtente(user);
             menu.setVisible(true);
             this.dispose();
         }
-        
+
         MenuUtente menu = new MenuUtente(user);
         menu.setVisible(true);
         this.dispose();

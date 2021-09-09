@@ -12,8 +12,9 @@ import com.eliatolin.gest_spedizioni.utils.DataUtility;
 public class LoginForm extends JFrame implements ActionListener {
 
     //inizializzo elementi
-    JButton access;
-    JButton registration;
+    JButton btnAccess;
+    JButton btnRegistration;
+    JButton btnBack;
     JPanel newPanel;
     JLabel userLabel, passLabel;
     final JTextField txtFieldUsername, txtFieldPassword;
@@ -21,7 +22,7 @@ public class LoginForm extends JFrame implements ActionListener {
 
     //costruttore
     public LoginForm(String type) {
-        setSize(400, 100);
+        setSize(400, 300);
 
         userLabel = new JLabel();
         userLabel.setText("Login " + type);
@@ -41,21 +42,23 @@ public class LoginForm extends JFrame implements ActionListener {
         txtFieldPassword = new JPasswordField(15);    //set length for the password  
 
         //creo il submit button  
-        access = new JButton("ACCEDI"); //set label to button  
-
+        btnAccess = new JButton("ACCEDI"); //set label to button  
+        
+        btnBack = new JButton("INDIETRO");
+        btnBack.addActionListener(this);
         //creo il pannello e inserisco gli elementi
-        newPanel = new JPanel(new GridLayout(3, 1));
+        newPanel = new JPanel(new GridLayout(0, 1));
         newPanel.setBackground(Color.lightGray);
         newPanel.add(userLabel);
         newPanel.add(txtFieldUsername);
         newPanel.add(passLabel);
         newPanel.add(txtFieldPassword);
-        newPanel.add(access);
-
+        newPanel.add(btnAccess);
+        
         if (type != "admin") {
-            registration = new JButton("REGISTRAZIONE");
-            newPanel.add(registration);
-            registration.addActionListener(this);
+            btnRegistration = new JButton("REGISTRAZIONE");
+            newPanel.add(btnRegistration);
+            btnRegistration.addActionListener(this);
             this.setTitle("LOGIN UTENTE");
             admin = false;
         } else {
@@ -65,9 +68,10 @@ public class LoginForm extends JFrame implements ActionListener {
 
         //aggiungo border 
         add(newPanel, BorderLayout.CENTER);
-
+        
+        newPanel.add(btnBack);
         //attacco l'evento
-        access.addActionListener(this);
+        btnAccess.addActionListener(this);
         setTitle("LOGIN FORM");
     }
 
@@ -79,7 +83,7 @@ public class LoginForm extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == access) {
+        if (ae.getSource() == btnAccess) {
             String username = txtFieldUsername.getText();
             String password = txtFieldPassword.getText();
 
@@ -94,6 +98,14 @@ public class LoginForm extends JFrame implements ActionListener {
                     tb.setVisible(true);
                     this.dispose();
                 }
+                else
+                {
+                    JOptionPane.showMessageDialog(null,
+                            "Credenziali errate",
+                            "Errore accesso",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             } else {
                 if (DataUtility.verificaAccesso(username, password)) {
                     Utente u = DataUtility.getUtente(username);
@@ -105,11 +117,17 @@ public class LoginForm extends JFrame implements ActionListener {
                             "Credenziali errate",
                             "Errore accesso",
                             JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
             }
-        } else if (ae.getSource() == registration) {
+        } else if (ae.getSource() == btnRegistration) {
             RegistrazioneForm rf = new RegistrazioneForm();
             rf.setVisible(true);
+            this.dispose();
+        } else if (ae.getSource() == btnBack)
+        {
+            WelcomeScreen ws = new WelcomeScreen();
+            ws.setVisible(true);
             this.dispose();
         }
 

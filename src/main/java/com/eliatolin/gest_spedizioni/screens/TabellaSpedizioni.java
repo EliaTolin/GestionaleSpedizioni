@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
-import com.eliatolin.gest_spedizioni.models.*;
 import com.eliatolin.gest_spedizioni.models.LayoutCelle;
 import com.eliatolin.gest_spedizioni.models.ListaSpedizioni;
 import com.eliatolin.gest_spedizioni.models.ListaUtenti;
@@ -38,7 +37,9 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
     private boolean enableModify = false;
 
     public TabellaSpedizioni() {
+        
         setSize(600, 600);
+        
         PannelloCentro = new JPanel();
         PannelloSud = new JPanel();
         PannelloTabella = new JPanel();
@@ -117,12 +118,6 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnIndietro) {
-            DataUtility.salvaInfoUtenti(lstUtenti);
-            WelcomeScreen ws = new WelcomeScreen();
-            ws.setVisible(true);
-            this.dispose();
-        }
 
         if (e.getSource() == btnRefund) {
             ListaSpedizioni sped = user.getListaSpedizioni();
@@ -136,8 +131,6 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
             }
             if (!rimborso_richiesto) {
                 JOptionPane.showMessageDialog(null, "Nessun rimborso richiesto", "Info", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                DataUtility.salvaInfoUtenti(lstUtenti);
             }
         }
 
@@ -159,8 +152,6 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
                 JOptionPane.showMessageDialog(this, "La spedizione selezionata "
                         + "è stata eliminata", "", JOptionPane.INFORMATION_MESSAGE);
                 tablemodel.fireTableDataChanged();
-                DataUtility.salvaInfoUtenti(lstUtenti);
-
             } else {
                 JOptionPane.showMessageDialog(this, "Non è possibile cancellare"
                         + " la spedizione perchè non è terminata", "", JOptionPane.INFORMATION_MESSAGE);
@@ -169,6 +160,11 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
 
         if (e.getSource() == btnStartModify) {
             enableModify = !enableModify;
+            if(enableModify)
+                btnStartModify.setBackground(Color.GREEN);
+            else 
+                btnStartModify.setBackground(Color.RED);
+            btnStartModify.setOpaque(true);
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
@@ -187,15 +183,20 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
                 }
             };
             new Thread(r).start();
-            DataUtility.salvaInfoUtenti(lstUtenti);
-
+        }
+       
+        if (e.getSource() == btnIndietro) {
+            DataUtility.salvaInfo(lstUtenti);
+            WelcomeScreen ws = new WelcomeScreen();
+            ws.setVisible(true);
+            this.dispose();
         }
 
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        DataUtility.salvaInfoUtenti(lstUtenti);
+        DataUtility.salvaInfo(lstUtenti);
         System.exit(0);
     }
 

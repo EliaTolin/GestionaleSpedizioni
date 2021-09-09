@@ -28,30 +28,30 @@ public class ThreadSpedizioniCasuali extends Thread {
         sped = lstSped.getSpedizione(idxSped);
         statoSped = sped.getStato();
 
-        csl = rnd.nextInt(1000);
+        csl = rnd.nextInt(100);
 
-        if (csl < 350) {
+        if (csl < 35) {
             if (statoSped.equals("IN_PREPARAZIONE")) {
                 sped.setStato("IN_TRANSITO");
                 tmSped.fireTableDataChanged();
             }
         }
 
-        if (csl > 350 && csl < 800) {
+        if (csl > 35 && csl < 80) {
             if (statoSped.equals("IN_TRANSITO")) {
                 sped.setStato("RICEVUTA");
                 tmSped.fireTableDataChanged();
             }
         }
 
-        if (csl > 800) {
+        if (csl > 80) {
             if (statoSped.equals("IN_TRANSITO") || statoSped.equals("IN_PREPARAZIONE")) {
                 sped.setStato("FALLITA");
                 tmSped.fireTableDataChanged();
             }
         }
 
-        if (csl < 700) {
+        if (csl < 70) {
             if (statoSped.equals("RIMBORSO_RICHIESTO")) {
                 sped.setStato("RIMBORSO_EROGATO");
                 tmSped.fireTableDataChanged();

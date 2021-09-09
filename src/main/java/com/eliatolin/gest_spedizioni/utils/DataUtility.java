@@ -8,7 +8,11 @@ import com.eliatolin.gest_spedizioni.models.ListaUtenti;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class DataUtility {
 
@@ -21,7 +25,7 @@ public abstract class DataUtility {
             if (!out_file.exists()) {
                 out_file.createNewFile();
             }
-            try (FileWriter fw = new FileWriter(out_file, true)) {
+            try ( FileWriter fw = new FileWriter(out_file, true)) {
                 fw.write(value);
                 fw.write("\n");
             }
@@ -102,7 +106,9 @@ public abstract class DataUtility {
     }
 
     public static boolean salvaSpedizione(Spedizione sp) {
-        
+        if (CheckSpedizioneLine(sp.toString())) {
+            return true;
+        }
         if (saveInformation(file_ship, sp.toString())) {
             return true;
         }
@@ -111,7 +117,10 @@ public abstract class DataUtility {
     }
 
     public static boolean salvaSpedizione(SpedizioneAssicurata sp) {
-       
+
+        if (CheckSpedizioneLine(sp.toString())) {
+            return true;
+        }
         if (saveInformation(file_ship, sp.toString())) {
             return true;
         }
@@ -140,7 +149,7 @@ public abstract class DataUtility {
                 }
                 String[] line = s_tmp.split(";");
                 if (line[0].equals(username)) {
-                    Utente u = new Utente(line[0],line[1],line[2]);
+                    Utente u = new Utente(line[0], line[1], line[2]);
                     return u;
                 }
             }
@@ -149,7 +158,7 @@ public abstract class DataUtility {
             return null;
         }
     }
-    
+
     public static ListaSpedizioni getSpedizioniUtente(String username) {
         File in_file;
         FileReader f;
@@ -183,7 +192,7 @@ public abstract class DataUtility {
                     Spedizione s;
                     if (line.length != 6) {
                         v_ass = line[6];
-                        s = new SpedizioneAssicurata(user,peso, date, dest,
+                        s = new SpedizioneAssicurata(user, peso, date, dest,
                                 stato, Float.parseFloat(v_ass));
                     } else {
                         s = new Spedizione(user, peso, date, dest,
@@ -200,15 +209,14 @@ public abstract class DataUtility {
         }
     }
 
-    public static ListaSpedizioni getSpedizioni() {
+    public static Boolean CheckSpedizioneLine(String lineSped) {
         File in_file;
         FileReader f;
         BufferedReader b;
         try {
-            ListaSpedizioni lst = new ListaSpedizioni();
             in_file = new File(file_ship);
             if (!in_file.exists()) {
-                return new ListaSpedizioni();
+                return false;
             }
             f = new FileReader(file_ship);
             b = new BufferedReader(f);
@@ -219,30 +227,14 @@ public abstract class DataUtility {
                 if (s_tmp == null) {
                     break;
                 }
-                String[] line = s_tmp.split(";");
-                String user, id, dest, peso, strDate, v_ass, stato;
-                user = line[0];
-                id = line[1];
-                dest = line[2];
-                peso = line[3];
-                strDate = line[4];
-                stato = line[5];
-                Date date = new SimpleDateFormat("dd-mm-yyyy").parse(strDate);
-                Spedizione s;
-                if (line.length != 6) {
-                    v_ass = line[6];
-                    s = new SpedizioneAssicurata(user, Float.parseFloat(peso), date, dest,
-                            stato, Float.parseFloat(v_ass));
-                } else {
-                    s = new Spedizione(user, Float.parseFloat(peso), date, dest,
-                            stato);
+                if (s_tmp.equals(lineSped)) {
+                    return true;
                 }
-                lst.Add(s);
             }
-            return lst;
-        } catch (IOException | NumberFormatException | ParseException e) {
-            System.err.println("Error - Get spedizioni");
-            return new ListaSpedizioni();
+            return false;
+        } catch (IOException e) {
+            System.err.println("Error - CheckID");
+            return false;
         }
     }
 
@@ -281,23 +273,19 @@ public abstract class DataUtility {
             return new ListaUtenti();
         }
     }
-    
-    private static void clearFile(String file) throws FileNotFoundException
-    {
-        try (PrintWriter writer = new PrintWriter(file)) {
+
+    private static void clearFile(String file) throws FileNotFoundException {
+        try ( PrintWriter writer = new PrintWriter(file)) {
             writer.print("");
         }
     }
-    
-    public static void salvaInfoUtenti(ListaUtenti lista)
-    {
-        for(int i = 0; i < lista.getNumeroUtenti();i++ )
-        {
+
+    public static void salvaInfo(ListaUtenti lista) {
+        for (int i = 0; i < lista.getNumeroUtenti(); i++) {
             Utente us = lista.getUtenteFromIdx(i);
             DataUtility.inserisciUtente(us);
             ListaSpedizioni ls = us.getListaSpedizioni();
-            for(int y = 0; y < ls.getNumeroSpedizioni(); y++)
-            {
+            for (int y = 0; y < ls.getNumeroSpedizioni(); y++) {
                 DataUtility.salvaSpedizione(ls.getSpedizione(i));
             }
         }
