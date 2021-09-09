@@ -11,13 +11,13 @@ import java.util.Random;
  */
 
 public class ThreadSpedizioniCasuali extends Thread {
-
+    
+    private int idxSped;
+    private int csl;
     private ListaSpedizioni lstSped;
     private SpedizioniTableModel tmSped;
     private Spedizione sped;
-    private int idxSped;
     private String statoSped;
-    private int csl;
     private Random rnd;
 
     public ThreadSpedizioniCasuali(SpedizioniTableModel t) {

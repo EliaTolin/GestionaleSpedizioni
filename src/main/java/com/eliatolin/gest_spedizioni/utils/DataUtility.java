@@ -71,6 +71,7 @@ public abstract class DataUtility {
                     return false;
                 }
                 String[] line = s_tmp.split(";");
+                //controllo se l'username e la password combaciano
                 if (line[0].equals(username)) {
                     if (line[1].equals(password)) {
                         return true;
@@ -103,6 +104,7 @@ public abstract class DataUtility {
                 if (s_tmp == null) {
                     return false;
                 }
+                //controllo l'esistenza di un username
                 String[] line = s_tmp.split(";");
                 if (line[0].equals(username)) {
                     return true;
@@ -160,6 +162,7 @@ public abstract class DataUtility {
                     return null;
                 }
                 String[] line = s_tmp.split(";");
+                //una volta ritrovato l'utente, ricostruisco l'oggetto
                 if (line[0].equals(username)) {
                     Utente u = new Utente(line[0], line[1], line[2]);
                     return u;
@@ -193,6 +196,7 @@ public abstract class DataUtility {
                 }
                 String[] line = s_tmp.split(";");
                 if (line[0].equals(username)) {
+                    //Estraggo ogni elemento dell'oggetto
                     String user, id, dest, strDate, v_ass, stato;
                     Float peso;
                     user = line[0];
@@ -203,6 +207,7 @@ public abstract class DataUtility {
                     stato = line[5];
                     Date date = new SimpleDateFormat("dd/MM/yyyy").parse(strDate);
                     Spedizione s;
+                    //se è formato da sette elementi è una spedizione assicurata
                     if (line.length != 6) {
                         v_ass = line[6];
                         s = new SpedizioneAssicurata(user, id, peso, date, dest,
@@ -272,6 +277,7 @@ public abstract class DataUtility {
                 if (s_tmp == null) {
                     break;
                 }
+                //Per ogni utente costruisco un'oggetto Utente
                 String[] line = s_tmp.split(";");
 
                 String user, password, indirizzo;
@@ -302,20 +308,24 @@ public abstract class DataUtility {
 
     //Metodo che salva tutte le info degli utenti.
     public static void salvaInfo(ListaUtenti lista) {
+        //Mi creo una lista di ListaSpedizione
         List<ListaSpedizioni> lstList = new ArrayList<>();
-
+        
+        //Per ogni utente estraggo la propria Lista
         for (int i = 0; i < lista.getNumeroUtenti(); i++) {
             Utente us = lista.getUtenteFromIdx(i);
             ListaSpedizioni ls = us.getListaSpedizioni();
             lstList.add(ls);
         }
-
+        
+        //Pulisco il vecchio file
         try {
             clearFile(file_ship);
         } catch (FileNotFoundException ex) {
             System.out.println("Error - Clear file");
         }
-
+        
+        //Salvo tutte le info degli utenti
         for (int i = 0; i < lista.getNumeroUtenti(); i++) {
             Utente us = lista.getUtenteFromIdx(i);
             if (!DataUtility.utenteRegistrato(us.getNomeUtente())) {
@@ -328,19 +338,21 @@ public abstract class DataUtility {
         }
     }
 
-    //Salvataggio ListaSpedizioni
+    //Salvataggio ListaSpedizioni generica
     public static void SalvaListaSpedizione(ListaSpedizioni ls) {
+        //Pulisco il vecchio contenuto
         try {
             clearFile(file_ship);
         } catch (FileNotFoundException ex) {
             System.out.println("Error - Clear file");
         }
+        //Ciclo ogni spedizione e la salvo
         for (int y = 0; y < ls.getNumeroSpedizioni(); y++) {
             DataUtility.salvaSpedizione(ls.getSpedizione(y));
         }
     }
 
-    //Salvataggio ListaSpedizioni
+    //Salvataggio ListaSpedizioni di un solo utente
     public static void SalvaListaSpedizione(ListaSpedizioni ls, String user) {
         if(ls == null)
             return;
