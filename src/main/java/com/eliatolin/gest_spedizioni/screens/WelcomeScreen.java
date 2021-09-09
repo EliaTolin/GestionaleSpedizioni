@@ -3,12 +3,6 @@ package com.eliatolin.gest_spedizioni.screens;
 import java.awt.*;  
 import java.awt.event.*;   
 import javax.swing.*;
-import java.lang.Exception;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
@@ -16,9 +10,9 @@ import java.lang.Exception;
  */
 
 public class WelcomeScreen extends JFrame implements ActionListener{
-    JLabel labelWelcome;
-    JLabel label;
-    JPanel panel;
+    JLabel welcomeLabel;
+    JLabel informationLabel;
+    JPanel mainPanel;
     JButton jbUser;
     JButton jbAdmin;
     
@@ -32,13 +26,13 @@ public class WelcomeScreen extends JFrame implements ActionListener{
         
         setSize(500,300);
         
-        panel = new JPanel(new GridLayout(0,1));
+        mainPanel = new JPanel(new GridLayout(0,1));
         
-        labelWelcome = new JLabel("Gestionale Spedizioni", SwingConstants.CENTER);
-        labelWelcome.setFont(new Font("Verdana", Font.BOLD, 18));
+        welcomeLabel = new JLabel("Gestionale Spedizioni", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Verdana", Font.BOLD, 18));
         
-        label = new JLabel("Come ti vuoi autenticare?", SwingConstants.CENTER);
-        label.setFont(new Font("Verdana", Font.PLAIN, 12));
+        informationLabel = new JLabel("Come ti vuoi autenticare?", SwingConstants.CENTER);
+        informationLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
         
         Dimension dButton = new Dimension(120,40);
         
@@ -50,11 +44,11 @@ public class WelcomeScreen extends JFrame implements ActionListener{
         jbAdmin.setPreferredSize(dButton);
         jbAdmin.addActionListener(this);
         
-        panel.add(labelWelcome);
-        panel.add(label);
-        panel.add(jbUser);
-        panel.add(jbAdmin);
-        add(panel);
+        mainPanel.add(welcomeLabel);
+        mainPanel.add(informationLabel);
+        mainPanel.add(jbUser);
+        mainPanel.add(jbAdmin);
+        add(mainPanel);
         
         setVisible(true);
     }
@@ -66,7 +60,6 @@ public class WelcomeScreen extends JFrame implements ActionListener{
         {
             LoginForm lf = new LoginForm("user");
             lf.setVisible(true);
-            //this.setVisible?????
             this.dispose();
         }
         else if (ae.getSource() == jbAdmin)

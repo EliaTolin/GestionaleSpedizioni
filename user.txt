@@ -1,2 +1,3 @@
 elia;elia;via n
 pippo;pippo;ia e
+nino;nino;r32

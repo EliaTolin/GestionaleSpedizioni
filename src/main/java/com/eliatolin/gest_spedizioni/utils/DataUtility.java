@@ -11,14 +11,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ *
+ * @author eliatolin
+ */
+
+
+//Classe che permette l'iterazione con la base di dati, per salvataggio o lettura.
 public abstract class DataUtility {
-
+    
+    //File dove vengono salvati gli utenti
     static String file_user = "user.txt";
+    //File dove vengono salvate le spedizioni
     static String file_ship = "ship.txt";
-
+    
+    //Metodo che dato un valore lo salva nel file passato per parametro
     private static boolean saveInformation(String filename, String value) {
         try {
             File out_file = new File(filename);
@@ -35,6 +43,7 @@ public abstract class DataUtility {
         return true;
     }
 
+    //Metodo che permette il salvataggio di un'utente
     public static boolean inserisciUtente(Utente user) {
         if (saveInformation(file_user, user.toString())) {
             return true;
@@ -43,6 +52,7 @@ public abstract class DataUtility {
         return false;
     }
 
+    //Metodo che verifica la possibilità di accesso di un'utente
     public static boolean verificaAccesso(String username, String password) {
         File in_file;
         FileReader f;
@@ -75,6 +85,7 @@ public abstract class DataUtility {
         }
     }
 
+    //Metodo che verifica se un'utente è registrato
     public static boolean utenteRegistrato(String username) {
         File in_file;
         FileReader f;
@@ -105,6 +116,7 @@ public abstract class DataUtility {
         }
     }
 
+    //Metodo che permette il salvataggio di una spedizione normale
     public static boolean salvaSpedizione(Spedizione sp) {
         if (CheckSpedizioneLine(sp.toString())) {
             return true;
@@ -116,6 +128,7 @@ public abstract class DataUtility {
         return false;
     }
 
+    //Metodo che permette il salvataggio di una spedizione assicurata
     public static boolean salvaSpedizione(SpedizioneAssicurata sp) {
 
         if (CheckSpedizioneLine(sp.toString())) {
@@ -128,6 +141,7 @@ public abstract class DataUtility {
         return false;
     }
 
+    //Metodo che ritorna un utente dato un'username
     public static Utente getUtente(String username) {
         File in_file;
         FileReader f;
@@ -159,6 +173,7 @@ public abstract class DataUtility {
         }
     }
 
+    //Metodo che ritorna una lista spedizioni dato un utente
     public static ListaSpedizioni getSpedizioniUtente(String username) {
         File in_file;
         FileReader f;
@@ -188,7 +203,7 @@ public abstract class DataUtility {
                     peso = Float.parseFloat(line[3]);
                     strDate = line[4];
                     stato = line[5];
-                    Date date = new SimpleDateFormat("dd-mm-yyyy").parse(strDate);
+                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(strDate);
                     Spedizione s;
                     if (line.length != 6) {
                         v_ass = line[6];
@@ -202,13 +217,14 @@ public abstract class DataUtility {
                 }
             }
             return lst;
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException | ParseException e) {
             System.err.println("Error - Get Spedizioni utente");
-            e.printStackTrace();
             return new ListaSpedizioni();
         }
     }
 
+    //Metodo che controlla l'esistenza di una spedizione all'interno del file 
+    //spedizioni
     public static Boolean CheckSpedizioneLine(String lineSped) {
         File in_file;
         FileReader f;
@@ -238,6 +254,7 @@ public abstract class DataUtility {
         }
     }
 
+    //Metodo che ritorna la lista utenti
     public static ListaUtenti getListaUtenti() {
         File in_file;
         FileReader f;
@@ -274,6 +291,7 @@ public abstract class DataUtility {
         }
     }
 
+    //Metodo che permette la pulizia di un file
     private static void clearFile(String file) throws FileNotFoundException {
         File in_file = new File(file_user);
         if (!in_file.exists()) {
@@ -284,6 +302,7 @@ public abstract class DataUtility {
         }
     }
 
+    //Metodo che salva tutte le info degli utenti.
     public static void salvaInfo(ListaUtenti lista) {
         List<ListaSpedizioni> lstList = new ArrayList<>();
 

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.eliatolin.gest_spedizioni.screens;
 
 import com.eliatolin.gest_spedizioni.models.SpedizioneAssicurata;
@@ -14,55 +9,59 @@ import com.eliatolin.gest_spedizioni.models.Utente;
 import com.eliatolin.gest_spedizioni.utils.DataUtility;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.logging.Logger;
 
 /**
  *
  * @author eliatolin
  */
+
+
+//Form che permette l'inserimento di una nuova spedizione
 public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
 
     final int MAX_LEN = 25;
     //inizializzo elementi
     JButton btnAddSpedizione, btnBack;
     JPanel newPanel;
-    JLabel pesoLabel,
-            addressLabel, valoreLabel;
-    JTextField txtFieldPeso,
-            txtFieldAddress, txtFieldValore;
+    JLabel pesoLabel,addressLabel, valoreLabel;
+    JTextField txtFieldPeso,txtFieldAddress, txtFieldValore;
     Boolean assicurata;
     Utente user;
 
     public AggiungiSpedizioneForm(Utente u, Boolean assicurata) {
-        setSize(200, 300);
+        
+        Dimension dButton = new Dimension(120,40);
+        //Definisco le componenti grafiche
+        setSize(300, 300);
         user = u;
         this.assicurata = assicurata;
-        JLabel information = new JLabel("Registrazione Spedizione");
 
         //creo la label per la password
         pesoLabel = new JLabel();
-        pesoLabel.setText("Peso");      //set label value for txtFieldPeso  
+        pesoLabel.setText("Peso");  
 
         //creo la textfield per l'inserimento della password 
         txtFieldPeso = new JTextField(MAX_LEN);
 
         //creo la label per la password
         addressLabel = new JLabel();
-        addressLabel.setText("Indirizzo");      //set label value for txtFieldIndirizzo
+        addressLabel.setText("Indirizzo");
         txtFieldAddress = new JTextField(MAX_LEN);
 
         btnAddSpedizione = new JButton("Aggiungi spedizione");
         btnBack = new JButton("Indietro");
-
+        btnAddSpedizione.setPreferredSize(dButton);
+        btnBack.setPreferredSize(dButton);
+        
         //creo il pannello e inserisco gli elementi
         newPanel = new JPanel(new GridLayout(0, 1));
         newPanel.setBackground(Color.lightGray);
-
+        
         //peso
         newPanel.add(pesoLabel);
         newPanel.add(txtFieldPeso);
+        
         //indirizzo
         newPanel.add(addressLabel);
         newPanel.add(txtFieldAddress);
@@ -88,7 +87,8 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
 
         setTitle("AGGIUNTA SPEDIZIONI");
     }
-
+    
+    //Catturo gli eventi
     @Override
     public void actionPerformed(ActionEvent ae) {
 
@@ -183,12 +183,12 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
                     "Conferma registrazione",
                     JOptionPane.INFORMATION_MESSAGE);
         } else if (ae.getSource() == btnBack) {
-            MenuUtente menu = new MenuUtente(user);
+            MenuUtenteForm menu = new MenuUtenteForm(user);
             menu.setVisible(true);
             this.dispose();
         }
 
-        MenuUtente menu = new MenuUtente(user);
+        MenuUtenteForm menu = new MenuUtenteForm(user);
         menu.setVisible(true);
         this.dispose();
 

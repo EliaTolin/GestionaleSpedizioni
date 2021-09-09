@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.eliatolin.gest_spedizioni.screens;
 
 import javax.swing.*;  
 import java.awt.*;  
 import java.awt.event.*;  
-import java.lang.Exception;  
 import com.eliatolin.gest_spedizioni.models.Utente;
 import com.eliatolin.gest_spedizioni.utils.DataUtility;
 
@@ -16,11 +10,13 @@ import com.eliatolin.gest_spedizioni.utils.DataUtility;
  *
  * @author eliatolin
  */
+
+//Form che permette la registrazione di un utente
 public class RegistrazioneForm extends JFrame implements ActionListener  {
     
      //inizializzo elementi
     JButton btnRegistration,btnHome;
-    JPanel newPanel;  
+    JPanel mainPanel;  
     JLabel userLabel, passLabel, addressLabel;  
     final JTextField  txtFieldUsername, txtFieldPassword, txtFieldAddress;  
 
@@ -28,25 +24,23 @@ public class RegistrazioneForm extends JFrame implements ActionListener  {
     {
         setSize(200,300);
         
-        JLabel information = new JLabel("Registrazione utente");
-        
         //creo la label con l'username  
         userLabel = new JLabel();  
-        userLabel.setText("Username");      //set label value for txtFieldUsername  
+        userLabel.setText("Username");
           
         //creo la textfield per l'inserimento del username
-        txtFieldUsername = new JTextField(15);    //set length of the text  
+        txtFieldUsername = new JTextField(15);
   
         //creo la label per la password
         passLabel = new JLabel();  
-        passLabel.setText("Password");      //set label value for txtFieldPassword  
+        passLabel.setText("Password");
           
         //creo la textfield per l'inserimento della password 
         txtFieldPassword = new JPasswordField(15);
         
         //creo la label per la password
         addressLabel = new JLabel();  
-        addressLabel.setText("Indirizzo");      //set label value for txtFieldIndirizzo
+        addressLabel.setText("Indirizzo");
           
         //creo la textfield per l'inserimento della password 
         txtFieldAddress = new JTextField(20);
@@ -55,19 +49,19 @@ public class RegistrazioneForm extends JFrame implements ActionListener  {
         btnHome = new JButton("Indietro");
         
         //creo il pannello e inserisco gli elementi
-        newPanel = new JPanel(new GridLayout(0, 1));  
-        newPanel.setBackground(Color.lightGray);
-        newPanel.add(userLabel);   
-        newPanel.add(txtFieldUsername); 
-        newPanel.add(passLabel); 
-        newPanel.add(txtFieldPassword);  
-        newPanel.add(addressLabel);
-        newPanel.add(txtFieldAddress);
-        newPanel.add(btnRegistration);
-        newPanel.add(btnHome);
+        mainPanel = new JPanel(new GridLayout(0, 1));  
+        mainPanel.setBackground(Color.lightGray);
+        mainPanel.add(userLabel);   
+        mainPanel.add(txtFieldUsername); 
+        mainPanel.add(passLabel); 
+        mainPanel.add(txtFieldPassword);  
+        mainPanel.add(addressLabel);
+        mainPanel.add(txtFieldAddress);
+        mainPanel.add(btnRegistration);
+        mainPanel.add(btnHome);
         
         //aggiungo border 
-        add(newPanel, BorderLayout.CENTER);  
+        add(mainPanel, BorderLayout.CENTER);  
         //attacco l'evento
         btnRegistration.addActionListener(this);
         btnHome.addActionListener(this);

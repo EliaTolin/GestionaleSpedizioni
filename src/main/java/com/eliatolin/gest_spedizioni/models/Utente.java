@@ -1,9 +1,13 @@
 package com.eliatolin.gest_spedizioni.models;
 
 import com.eliatolin.gest_spedizioni.utils.DataUtility;
-import com.eliatolin.gest_spedizioni.models.*;
-import java.util.Random;
 
+/**
+ *
+ * @author eliatolin
+ */
+
+//Classe che definisce un utente
 public class Utente {
 
     private final String nomeUtente;
@@ -33,26 +37,6 @@ public class Utente {
 
     public ListaSpedizioni getListaSpedizioni() {
         return DataUtility.getSpedizioniUtente(this.nomeUtente);
-    }
-
-    public int getContatore() {
-        return contatore;
-    }
-
-    public void inc() {
-        contatore++;
-    }
-
-    public void dec() {
-        if (contatore > 0) {
-            contatore--;
-        }
-    }
-
-    public String id(String id) {
-        Random rand = new Random();
-        int n = rand.nextInt(1500000);
-        return getNomeUtente() + contatore + n;
     }
 
     @Override

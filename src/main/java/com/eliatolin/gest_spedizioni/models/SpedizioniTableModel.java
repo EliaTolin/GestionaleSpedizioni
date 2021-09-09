@@ -1,20 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.eliatolin.gest_spedizioni.models;
 
 import javax.swing.table.AbstractTableModel;
-import com.eliatolin.gest_spedizioni.models.*;
-import java.text.SimpleDateFormat;
 
 /**
  *
  * @author eliatolin
  */
-public class SpedizioniTableModel extends AbstractTableModel {
 
+//Classe che eredita AbstractTableModel, viene utilizzata per definire la tabella
+//spedizioni. 
+public class SpedizioniTableModel extends AbstractTableModel {
+    
+    //Nomi delle varie colonne
     private final String[] clmName = {"Nome", "Codice", "Destinazione", "Peso", "Data", "Stato", "Valore Assicurato"};
 
     private ListaSpedizioni lstSpedizioni;
@@ -33,6 +30,7 @@ public class SpedizioniTableModel extends AbstractTableModel {
         return lstSpedizioni.getNumeroSpedizioni();
     }
 
+    //Metodo che ritorna il valore di una determinata cella
     @Override
     public Object getValueAt(int row, int col) {
 
@@ -51,17 +49,20 @@ public class SpedizioniTableModel extends AbstractTableModel {
             default -> null;
         };
     }
-
+    
+    //Metodo che ritorna il nome di una colonna
     @Override
     public String getColumnName(int col) {
         return clmName[col];
     }
-
+    
+    //Si utilizza per verificare se una cella è editabile
     @Override
     public boolean isCellEditable(int row, int col) {
         return col == 5;
     }
 
+    //Si imposta lo stato di una spedizione
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         String newValue = (String) aValue;

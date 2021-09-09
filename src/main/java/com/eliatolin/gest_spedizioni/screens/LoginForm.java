@@ -5,19 +5,26 @@ import com.eliatolin.gest_spedizioni.models.ListaUtenti;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.Exception;
 import com.eliatolin.gest_spedizioni.models.Utente;
 import com.eliatolin.gest_spedizioni.utils.DataUtility;
 
+/**
+ *
+ * @author eliatolin
+ */
+
+//Form che permette il Login utente
 public class LoginForm extends JFrame implements ActionListener {
 
     //inizializzo elementi
     JButton btnAccess;
     JButton btnRegistration;
     JButton btnBack;
-    JPanel newPanel;
+    JPanel mainPanel;
     JLabel userLabel, passLabel;
     final JTextField txtFieldUsername, txtFieldPassword;
+    
+    //utilizzo la variabile per vedere se sono admin
     boolean admin = false;
 
     //costruttore
@@ -29,35 +36,36 @@ public class LoginForm extends JFrame implements ActionListener {
 
         //creo la label con l'username  
         userLabel = new JLabel();
-        userLabel.setText("Username");      //set label value for txtFieldUsername  
+        userLabel.setText("Username");
 
         //creo la textfield per l'inserimento del username
-        txtFieldUsername = new JTextField(15);    //set length of the text  
+        txtFieldUsername = new JTextField(15);  
 
         //creo la label per la password
         passLabel = new JLabel();
-        passLabel.setText("Password");      //set label value for txtFieldPassword  
+        passLabel.setText("Password");
 
         //creo la textfield per l'inserimento della password 
-        txtFieldPassword = new JPasswordField(15);    //set length for the password  
+        txtFieldPassword = new JPasswordField(15); 
 
         //creo il submit button  
-        btnAccess = new JButton("ACCEDI"); //set label to button  
+        btnAccess = new JButton("ACCEDI");  
         
         btnBack = new JButton("INDIETRO");
         btnBack.addActionListener(this);
+        
         //creo il pannello e inserisco gli elementi
-        newPanel = new JPanel(new GridLayout(0, 1));
-        newPanel.setBackground(Color.lightGray);
-        newPanel.add(userLabel);
-        newPanel.add(txtFieldUsername);
-        newPanel.add(passLabel);
-        newPanel.add(txtFieldPassword);
-        newPanel.add(btnAccess);
+        mainPanel = new JPanel(new GridLayout(0, 1));
+        mainPanel.setBackground(Color.lightGray);
+        mainPanel.add(userLabel);
+        mainPanel.add(txtFieldUsername);
+        mainPanel.add(passLabel);
+        mainPanel.add(txtFieldPassword);
+        mainPanel.add(btnAccess);
         
         if (type != "admin") {
             btnRegistration = new JButton("REGISTRAZIONE");
-            newPanel.add(btnRegistration);
+            mainPanel.add(btnRegistration);
             btnRegistration.addActionListener(this);
             this.setTitle("LOGIN UTENTE");
             admin = false;
@@ -67,9 +75,9 @@ public class LoginForm extends JFrame implements ActionListener {
         }
 
         //aggiungo border 
-        add(newPanel, BorderLayout.CENTER);
+        add(mainPanel, BorderLayout.CENTER);
         
-        newPanel.add(btnBack);
+        mainPanel.add(btnBack);
         //attacco l'evento
         btnAccess.addActionListener(this);
         setTitle("LOGIN FORM");
@@ -109,7 +117,7 @@ public class LoginForm extends JFrame implements ActionListener {
             } else {
                 if (DataUtility.verificaAccesso(username, password)) {
                     Utente u = DataUtility.getUtente(username);
-                    MenuUtente menu = new MenuUtente(u);
+                    MenuUtenteForm menu = new MenuUtenteForm(u);
                     menu.setVisible(true);
                     this.dispose();
                 } else {

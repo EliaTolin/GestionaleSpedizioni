@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.eliatolin.gest_spedizioni.models;
 
 import java.awt.Color;
@@ -16,35 +11,38 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author eliatolin
  */
 
+//Si estende la classe DefaultTableCellRender per gestire il comportamento delle celle
+//in base al loro stato
 public class LayoutCelle extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+        String stato = (String) table.getValueAt(row, 5);
         
-        String stato = (String)table.getValueAt(row, 5);
+        //Per ogni stato, imposto un colore
         switch (stato) {
 
-            case "IN_PREPARAZIONE" ->  {
+            case "IN_PREPARAZIONE" -> {
                 setBackground(Color.LIGHT_GRAY);
             }
-            case "TRANSITO" ->  {
+            case "TRANSITO" -> {
                 setBackground(Color.MAGENTA);
             }
-            case "RICEVUTA" ->  {
+            case "RICEVUTA" -> {
                 setBackground(Color.GREEN);
             }
-            case "FALLITA" ->  {
+            case "FALLITA" -> {
                 setBackground(Color.RED);
             }
-            case "RIMBORSO_RICHIESTO" ->  {
+            case "RIMBORSO_RICHIESTO" -> {
                 setBackground(Color.ORANGE);
             }
-            case "RIMBORSO_EROGATO" ->  {
+            case "RIMBORSO_EROGATO" -> {
                 setBackground(Color.CYAN);
             }
-            default ->  {
+            default -> {
                 setBackground(Color.DARK_GRAY);
             }
         }

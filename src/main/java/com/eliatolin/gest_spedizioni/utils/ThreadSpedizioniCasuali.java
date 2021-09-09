@@ -5,6 +5,11 @@ import com.eliatolin.gest_spedizioni.models.Spedizione;
 import com.eliatolin.gest_spedizioni.models.SpedizioniTableModel;
 import java.util.Random;
 
+/**
+ *
+ * @author eliatolin
+ */
+
 public class ThreadSpedizioniCasuali extends Thread {
 
     private ListaSpedizioni lstSped;

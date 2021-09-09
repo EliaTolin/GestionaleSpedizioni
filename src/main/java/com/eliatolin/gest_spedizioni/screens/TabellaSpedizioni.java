@@ -15,76 +15,84 @@ import com.eliatolin.gest_spedizioni.utils.ThreadSpedizioniCasuali;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowListener;
 
+/**
+ *
+ * @author eliatolin
+ */
+//Tabella che rappresenta tutte le spedizioni per utente o per tutti gli utenti.
 public class TabellaSpedizioni extends JFrame implements ActionListener, WindowListener {
 
     private ListaUtenti lstUtenti;
     private ListaSpedizioni lstSpedizioni;
     private Utente user;
-    private boolean is_administrator;
-    private boolean enable_modify;
+    private boolean isAdmin;
 
-    private JButton btnIndietro;
-    private JButton btnRimuovi;
+    private JButton btnBack;
+    private JButton btnRemove;
     private JButton btnStartModify;
     private JButton btnRefund;
 
-    private JPanel PannelloCentro, PannelloSud;
-    private JPanel PannelloTabella;
+    private JPanel centerPanel, bottomPanel;
+    private JPanel tablePanel;
 
     private JTable table;
     private SpedizioniTableModel tablemodel;
 
     private boolean enableModify = false;
+    Dimension dButton = new Dimension(120, 40);
 
     public TabellaSpedizioni() {
-        
-        setSize(600, 600);
-        
-        PannelloCentro = new JPanel();
-        PannelloSud = new JPanel();
-        PannelloTabella = new JPanel();
-        PannelloTabella.setLayout(new BorderLayout());
 
-        btnIndietro = new JButton("Indietro");
-        btnIndietro.addActionListener(this);
+        setSize(600, 600);
+
+        centerPanel = new JPanel();
+        bottomPanel = new JPanel();
+        tablePanel = new JPanel();
+        tablePanel.setLayout(new BorderLayout());
+
+        btnBack = new JButton("Indietro");
+        btnBack.addActionListener(this);
         btnRefund = new JButton("Rimborso");
         btnRefund.addActionListener(this);
 
-        btnRimuovi = new JButton("Rimuovi");
-        btnRimuovi.addActionListener(this);
+        btnRemove = new JButton("Rimuovi");
+        btnRemove.addActionListener(this);
         btnStartModify = new JButton("Modifica");
         btnStartModify.addActionListener(this);
 
+        btnRemove.setPreferredSize(dButton);
+        btnStartModify.setPreferredSize(dButton);
+        btnRefund.setPreferredSize(dButton);
+        btnBack.setPreferredSize(dButton);
         enableModify = false;
 
-        PannelloTabella.add(PannelloCentro, BorderLayout.CENTER);
-        PannelloTabella.add(PannelloSud, BorderLayout.SOUTH);
+        tablePanel.add(centerPanel, BorderLayout.CENTER);
+        tablePanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     public TabellaSpedizioni(Utente u, ListaUtenti l) {
         this();
         user = u;
         lstUtenti = l;
-        setAdmin(false);
+        setAdministrator(false);
 
         tablemodel = new SpedizioniTableModel(user.getListaSpedizioni());
         table = new JTable(tablemodel);
         table.setDefaultRenderer(Object.class, new LayoutCelle());
         table.setPreferredScrollableViewportSize(table.getPreferredSize());
         JScrollPane scrollpane = new JScrollPane(table);
-        PannelloCentro.add(scrollpane);
+        centerPanel.add(scrollpane);
 
-        PannelloSud.add(btnIndietro);
-        PannelloSud.add(btnRefund);
+        bottomPanel.add(btnBack);
+        bottomPanel.add(btnRefund);
 
-        this.add(PannelloTabella);
+        this.add(tablePanel);
     }
 
     public TabellaSpedizioni(ListaUtenti l) {
         this();
         lstUtenti = l;
-        setAdmin(true);
-
+        setAdministrator(true);
         lstSpedizioni = new ListaSpedizioni();
         for (int i = 0; i < l.getNumeroUtenti(); i++) {
             Utente u = l.getUtenteFromIdx(i);
@@ -99,26 +107,25 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
         table.setDefaultRenderer(Object.class, new LayoutCelle());
         table.setPreferredScrollableViewportSize(table.getPreferredSize());
         JScrollPane scrollPane = new JScrollPane(table);
-        PannelloCentro.add(scrollPane);
+        centerPanel.add(scrollPane);
         btnStartModify.setBackground(Color.RED);
-        PannelloSud.add(btnIndietro);
-        PannelloSud.add(btnRimuovi);
-        PannelloSud.add(btnStartModify);
+        bottomPanel.add(btnBack);
+        bottomPanel.add(btnRemove);
+        bottomPanel.add(btnStartModify);
 
-        this.add(PannelloTabella);
+        this.add(tablePanel);
     }
 
     public boolean isAdmin() {
-        return is_administrator;
+        return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
-        this.is_administrator = admin;
+    public void setAdministrator(boolean admin) {
+        this.isAdmin = admin;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (e.getSource() == btnRefund) {
             ListaSpedizioni sped = user.getListaSpedizioni();
             boolean rimborso_richiesto = false;
@@ -134,7 +141,7 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
             }
         }
 
-        if (e.getSource() == btnRimuovi) {
+        if (e.getSource() == btnRemove) {
             ListaSpedizioni lstSped = tablemodel.getLista();
             Spedizione s = lstSped.getSpedizione(table.getSelectedRow());
 
@@ -159,13 +166,14 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
         }
 
         if (e.getSource() == btnStartModify) {
-            
+
             enableModify = !enableModify;
-            if(enableModify)
+            if (enableModify) {
                 btnStartModify.setBackground(Color.GREEN);
-            else 
+            } else {
                 btnStartModify.setBackground(Color.RED);
-            
+            }
+
             btnStartModify.setOpaque(true);
             Runnable r = new Runnable() {
                 @Override
@@ -176,7 +184,7 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
                         t = new ThreadSpedizioniCasuali(tablemodel);
                         t.start();
                         try {
-                            Thread.sleep(4000);
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -186,8 +194,8 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
             };
             new Thread(r).start();
         }
-       
-        if (e.getSource() == btnIndietro) {
+
+        if (e.getSource() == btnBack) {
             DataUtility.salvaInfo(lstUtenti);
             WelcomeScreen ws = new WelcomeScreen();
             ws.setVisible(true);

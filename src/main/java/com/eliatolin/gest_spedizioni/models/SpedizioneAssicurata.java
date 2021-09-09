@@ -1,19 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.eliatolin.gest_spedizioni.models;
 import java.util.Date;
+
 /**
  *
  * @author eliatolin
  */
 
+//Si estende la classe spedizione per implementare le feature di spedizione assicurata.
 public class SpedizioneAssicurata extends Spedizione{
     
     private final float valoreAssicurato;
     
+    //Diversi costruttori per ogni diverso utilizzo.
     public SpedizioneAssicurata(String user,String id, float peso, Date data, String destinazione, 
             String stato, float valoreAssicurato){
         super(user,id,peso,data,destinazione);
@@ -34,6 +33,7 @@ public class SpedizioneAssicurata extends Spedizione{
         this.valoreAssicurato = valoreAssicurato;
     }
     
+    //Override dei metodi della classe padre.
     @Override
     public float getValoreAssicurato()
     {

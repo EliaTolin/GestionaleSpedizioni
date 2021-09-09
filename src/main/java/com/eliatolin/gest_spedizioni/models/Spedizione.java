@@ -8,11 +8,9 @@ import java.util.Date;
  *
  * @author eliatolin
  */
-/**
- *
- * @author eliatolin
- */
 
+//Si implementa una classe Spedizione che rappresenta una spedizione classica
+//non assicurata.
 public class Spedizione {
 
     protected final String user;
@@ -21,7 +19,7 @@ public class Spedizione {
     protected final float peso;
     protected String stato;
     protected final Date date;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
     public Spedizione(String user, float peso, Date data, String destinazione) {
         this.user = user;
@@ -104,7 +102,7 @@ public class Spedizione {
     }
 
     public String getDateToString() {
-        return sdf.format(date);
+        return new SimpleDateFormat("dd/MM/yyyy").format(getDate());
     }
 
     public String getUtente() {
@@ -123,7 +121,7 @@ public class Spedizione {
         return getStato().equals("FALLITA") || getStato().equals("RICEVUTA");
     }
 
-    public String getCasualId(String value) {
+    public final String getCasualId(String value) {
         long unixTime = System.currentTimeMillis() / 1000L;
         String s =  "IT" + value.toUpperCase()
                 + String.valueOf(unixTime);

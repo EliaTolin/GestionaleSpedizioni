@@ -13,27 +13,26 @@ import javax.swing.*;
  * @author eliatolin
  */
 
-public class MenuUtente extends JFrame implements ActionListener{
+//Form che permette la scelta delle opeorazioni possibili per l'utente
+public class MenuUtenteForm extends JFrame implements ActionListener{
     JLabel labelWelcome;
-    JLabel label;
-    JPanel panel;
+    JPanel mainPanel;
     JButton jbSpedizione;
     JButton jbSpedAssicurata;
     JButton jbTabella;
     JButton jbBack;
     
     Utente user;
-    public MenuUtente(Utente u)
+    public MenuUtenteForm(Utente u)
     {
+        //definisco le componenti grafiche
         super("Menu");
+        
         user = u;
-        setDefaultCloseOperation(javax.swing.
-                WindowConstants.DISPOSE_ON_CLOSE);  
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         setSize(500,300);
         
-        panel = new JPanel(new GridLayout(0,1));
+        mainPanel = new JPanel(new GridLayout(0,1));
         
         labelWelcome = new JLabel("Gestionale Spedizioni", SwingConstants.CENTER);
         labelWelcome.setFont(new Font("Verdana", Font.BOLD, 18));
@@ -56,12 +55,12 @@ public class MenuUtente extends JFrame implements ActionListener{
         jbBack.setPreferredSize(dButton);
         jbBack.addActionListener(this);
         
-        panel.add(labelWelcome);
-        panel.add(jbSpedizione);
-        panel.add(jbSpedAssicurata);
-        panel.add(jbTabella);
-        panel.add(jbBack);
-        add(panel);
+        mainPanel.add(labelWelcome);
+        mainPanel.add(jbSpedizione);
+        mainPanel.add(jbSpedAssicurata);
+        mainPanel.add(jbTabella);
+        mainPanel.add(jbBack);
+        add(mainPanel);
         
         setVisible(true);
     }
