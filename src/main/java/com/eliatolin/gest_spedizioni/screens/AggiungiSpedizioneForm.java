@@ -100,7 +100,7 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
                 if (pesoTmp.length() == 0) {
                     JOptionPane.showMessageDialog(null,
                             "Inserire peso",
-                            "Errore registrazione",
+                            "Errore inserimento spedizione",
                             JOptionPane.ERROR_MESSAGE);
                     return;
 
@@ -109,7 +109,7 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null,
                         "Errore conversione peso",
-                        "Errore registrazione",
+                        "Errore inserimento spedizione",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -117,7 +117,7 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
             if (address.length() == 0) {
                 JOptionPane.showMessageDialog(null,
                         "Inserisci tutte le informazioni",
-                        "Errore registrazione",
+                        "Errore inserimento spedizione",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -125,7 +125,7 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
             if (peso <= 0) {
                 JOptionPane.showMessageDialog(null,
                         "Errore inserimento peso",
-                        "Errore registrazione",
+                        "Errore inserimento spedizione",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -137,7 +137,25 @@ public class AggiungiSpedizioneForm extends JFrame implements ActionListener {
                 date1 = sdf.parse(dateTmp);
                 Spedizione s;
                 if (assicurata) {
-                    Float valore = Float.parseFloat(txtFieldValore.getText());
+                    Float valore;
+                    try {
+                        String valAssTmp = txtFieldValore.getText();
+                        if (valAssTmp.length() == 0) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Inserire valore assicurato",
+                                    "Errore inserimento spedizione",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+
+                        }
+                        valore = Float.parseFloat(valAssTmp);
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null,
+                                "Errore conversione valore assicurato",
+                                "Errore inserimento spedizione",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     s = new SpedizioneAssicurata(user.getNomeUtente(), peso, date1, address, valore);
                 } else {
                     s = new Spedizione(user.getNomeUtente(), peso, date1, address);

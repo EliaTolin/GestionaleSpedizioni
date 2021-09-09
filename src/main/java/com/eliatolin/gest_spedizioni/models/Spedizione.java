@@ -31,11 +31,30 @@ public class Spedizione {
         this.destinazione = destinazione;
         this.stato = "IN_PREPARAZIONE";
     }
-
+    
+    public Spedizione(String user,String id, float peso, Date data, String destinazione) {
+        this.user = user;
+        this.id = id;
+        this.peso = peso;
+        this.date = data;
+        this.destinazione = destinazione;
+        this.stato = "IN_PREPARAZIONE";
+    }
+    
     public Spedizione(String user, float peso, Date data, String destinazione,
             String stato) {
         this.user = user;
         this.id = getCasualId(user);
+        this.peso = peso;
+        this.date = data;
+        this.destinazione = destinazione;
+        this.stato = stato;
+    }
+    
+    public Spedizione(String user,String id,float peso, Date data, String destinazione,
+            String stato) {
+        this.user = user;
+        this.id = id;
         this.peso = peso;
         this.date = data;
         this.destinazione = destinazione;
@@ -106,8 +125,9 @@ public class Spedizione {
 
     public String getCasualId(String value) {
         long unixTime = System.currentTimeMillis() / 1000L;
-        return "IT" + value.toUpperCase()
+        String s =  "IT" + value.toUpperCase()
                 + String.valueOf(unixTime);
+        return s; 
     }
 
     @Override

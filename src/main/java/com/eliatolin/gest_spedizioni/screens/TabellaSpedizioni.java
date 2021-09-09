@@ -100,7 +100,7 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
         table.setPreferredScrollableViewportSize(table.getPreferredSize());
         JScrollPane scrollPane = new JScrollPane(table);
         PannelloCentro.add(scrollPane);
-
+        btnStartModify.setBackground(Color.RED);
         PannelloSud.add(btnIndietro);
         PannelloSud.add(btnRimuovi);
         PannelloSud.add(btnStartModify);
@@ -159,11 +159,13 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
         }
 
         if (e.getSource() == btnStartModify) {
+            
             enableModify = !enableModify;
             if(enableModify)
                 btnStartModify.setBackground(Color.GREEN);
             else 
                 btnStartModify.setBackground(Color.RED);
+            
             btnStartModify.setOpaque(true);
             Runnable r = new Runnable() {
                 @Override

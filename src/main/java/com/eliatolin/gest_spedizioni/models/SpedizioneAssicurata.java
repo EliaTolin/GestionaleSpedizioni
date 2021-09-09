@@ -14,6 +14,13 @@ public class SpedizioneAssicurata extends Spedizione{
     
     private final float valoreAssicurato;
     
+    public SpedizioneAssicurata(String user,String id, float peso, Date data, String destinazione, 
+            String stato, float valoreAssicurato){
+        super(user,id,peso,data,destinazione);
+        setStato(stato);
+        this.valoreAssicurato = valoreAssicurato;
+    }
+    
     public SpedizioneAssicurata(String user, float peso, Date data, String destinazione, 
             String stato, float valoreAssicurato){
         super(user,peso,data,destinazione);

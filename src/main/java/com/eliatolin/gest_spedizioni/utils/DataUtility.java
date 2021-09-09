@@ -192,10 +192,10 @@ public abstract class DataUtility {
                     Spedizione s;
                     if (line.length != 6) {
                         v_ass = line[6];
-                        s = new SpedizioneAssicurata(user, peso, date, dest,
+                        s = new SpedizioneAssicurata(user,id, peso, date, dest,
                                 stato, Float.parseFloat(v_ass));
                     } else {
-                        s = new Spedizione(user, peso, date, dest,
+                        s = new Spedizione(user,id, peso, date, dest,
                                 stato);
                     }
                     lst.Add(s);
@@ -275,18 +275,38 @@ public abstract class DataUtility {
     }
 
     private static void clearFile(String file) throws FileNotFoundException {
+        File in_file = new File(file_user);
+        if (!in_file.exists()) {
+            return;
+        }
         try ( PrintWriter writer = new PrintWriter(file)) {
             writer.print("");
         }
     }
 
     public static void salvaInfo(ListaUtenti lista) {
+        List<ListaSpedizioni> lstList = new ArrayList<>();
+
         for (int i = 0; i < lista.getNumeroUtenti(); i++) {
             Utente us = lista.getUtenteFromIdx(i);
-            DataUtility.inserisciUtente(us);
             ListaSpedizioni ls = us.getListaSpedizioni();
+            lstList.add(ls);
+        }
+
+        try {
+            clearFile(file_ship);
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error - Clear file");
+        }
+
+        for (int i = 0; i < lista.getNumeroUtenti(); i++) {
+            Utente us = lista.getUtenteFromIdx(i);
+            if (!DataUtility.utenteRegistrato(us.getNomeUtente())) {
+                DataUtility.inserisciUtente(us);
+            }
+            ListaSpedizioni ls = lstList.get(i);
             for (int y = 0; y < ls.getNumeroSpedizioni(); y++) {
-                DataUtility.salvaSpedizione(ls.getSpedizione(i));
+                DataUtility.salvaSpedizione(ls.getSpedizione(y));
             }
         }
     }
