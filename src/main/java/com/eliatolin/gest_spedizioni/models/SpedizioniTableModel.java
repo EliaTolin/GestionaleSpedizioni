@@ -7,6 +7,7 @@ package com.eliatolin.gest_spedizioni.models;
 
 import javax.swing.table.AbstractTableModel;
 import com.eliatolin.gest_spedizioni.models.*;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -36,13 +37,13 @@ public class SpedizioniTableModel extends AbstractTableModel {
     public Object getValueAt(int row, int col) {
 
         Spedizione ship = lstSpedizioni.getSpedizione(row);
-
+        
         return switch (col) {
             case 0 -> ship.getUtente();
             case 1 -> ship.getId();
             case 2 -> ship.getDestinazione();
             case 3 -> ship.getPeso();
-            case 4 -> ship.getDate();
+            case 4 -> ship.getDateToString();
             case 5 -> ship.getStato();
             case 6 -> ship.getValoreAssicurato();
             default -> null;
