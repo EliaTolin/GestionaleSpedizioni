@@ -13,7 +13,6 @@ public class Utente {
     private final String nomeUtente;
     private final String password;
     private final String indirizzo;
-    private int contatore;
     public String id;
 
     public Utente(String nomeUtente, String password, String indirizzo) {

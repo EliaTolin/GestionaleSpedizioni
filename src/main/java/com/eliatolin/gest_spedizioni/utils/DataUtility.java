@@ -16,17 +16,15 @@ import java.util.List;
  *
  * @author eliatolin
  */
-
-
 //Classe che permette l'iterazione con la base di dati, per salvataggio o lettura.
 public abstract class DataUtility {
-    
-    //File dove vengono salvati gli utenti
+
+    //File dove vengono salvati gli utenti.
     static String file_user = "user.txt";
-    //File dove vengono salvate le spedizioni
+    //File dove vengono salvate le spedizioni.
     static String file_ship = "ship.txt";
-    
-    //Metodo che dato un valore lo salva nel file passato per parametro
+
+    //Metodo che dato un valore lo salva nel file passato per parametro.
     private static boolean saveInformation(String filename, String value) {
         try {
             File out_file = new File(filename);
@@ -43,7 +41,7 @@ public abstract class DataUtility {
         return true;
     }
 
-    //Metodo che permette il salvataggio di un'utente
+    //Metodo che permette il salvataggio di un'utente.
     public static boolean inserisciUtente(Utente user) {
         if (saveInformation(file_user, user.toString())) {
             return true;
@@ -52,7 +50,7 @@ public abstract class DataUtility {
         return false;
     }
 
-    //Metodo che verifica la possibilità di accesso di un'utente
+    //Metodo che verifica la possibilità di accesso di un'utente.
     public static boolean verificaAccesso(String username, String password) {
         File in_file;
         FileReader f;
@@ -85,7 +83,7 @@ public abstract class DataUtility {
         }
     }
 
-    //Metodo che verifica se un'utente è registrato
+    //Metodo che verifica se un'utente è registrato.
     public static boolean utenteRegistrato(String username) {
         File in_file;
         FileReader f;
@@ -116,7 +114,7 @@ public abstract class DataUtility {
         }
     }
 
-    //Metodo che permette il salvataggio di una spedizione normale
+    //Metodo che permette il salvataggio di una spedizione normale.
     public static boolean salvaSpedizione(Spedizione sp) {
         if (CheckSpedizioneLine(sp.toString())) {
             return true;
@@ -128,7 +126,7 @@ public abstract class DataUtility {
         return false;
     }
 
-    //Metodo che permette il salvataggio di una spedizione assicurata
+    //Metodo che permette il salvataggio di una spedizione assicurata.
     public static boolean salvaSpedizione(SpedizioneAssicurata sp) {
 
         if (CheckSpedizioneLine(sp.toString())) {
@@ -141,7 +139,7 @@ public abstract class DataUtility {
         return false;
     }
 
-    //Metodo che ritorna un utente dato un'username
+    //Metodo che ritorna un utente dato un'username.
     public static Utente getUtente(String username) {
         File in_file;
         FileReader f;
@@ -173,7 +171,7 @@ public abstract class DataUtility {
         }
     }
 
-    //Metodo che ritorna una lista spedizioni dato un utente
+    //Metodo che ritorna una lista spedizioni dato un utente.
     public static ListaSpedizioni getSpedizioniUtente(String username) {
         File in_file;
         FileReader f;
@@ -207,10 +205,10 @@ public abstract class DataUtility {
                     Spedizione s;
                     if (line.length != 6) {
                         v_ass = line[6];
-                        s = new SpedizioneAssicurata(user,id, peso, date, dest,
+                        s = new SpedizioneAssicurata(user, id, peso, date, dest,
                                 stato, Float.parseFloat(v_ass));
                     } else {
-                        s = new Spedizione(user,id, peso, date, dest,
+                        s = new Spedizione(user, id, peso, date, dest,
                                 stato);
                     }
                     lst.Add(s);
@@ -224,7 +222,7 @@ public abstract class DataUtility {
     }
 
     //Metodo che controlla l'esistenza di una spedizione all'interno del file 
-    //spedizioni
+    //spedizioni.
     public static Boolean CheckSpedizioneLine(String lineSped) {
         File in_file;
         FileReader f;
@@ -254,7 +252,7 @@ public abstract class DataUtility {
         }
     }
 
-    //Metodo che ritorna la lista utenti
+    //Metodo che ritorna la lista utenti.
     public static ListaUtenti getListaUtenti() {
         File in_file;
         FileReader f;
@@ -291,7 +289,7 @@ public abstract class DataUtility {
         }
     }
 
-    //Metodo che permette la pulizia di un file
+    //Metodo che permette la pulizia di un file.
     private static void clearFile(String file) throws FileNotFoundException {
         File in_file = new File(file_user);
         if (!in_file.exists()) {
@@ -326,6 +324,53 @@ public abstract class DataUtility {
             ListaSpedizioni ls = lstList.get(i);
             for (int y = 0; y < ls.getNumeroSpedizioni(); y++) {
                 DataUtility.salvaSpedizione(ls.getSpedizione(y));
+            }
+        }
+    }
+
+    //Salvataggio ListaSpedizioni
+    public static void SalvaListaSpedizione(ListaSpedizioni ls) {
+        try {
+            clearFile(file_ship);
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error - Clear file");
+        }
+        for (int y = 0; y < ls.getNumeroSpedizioni(); y++) {
+            DataUtility.salvaSpedizione(ls.getSpedizione(y));
+        }
+    }
+
+    //Salvataggio ListaSpedizioni
+    public static void SalvaListaSpedizione(ListaSpedizioni ls, String user) {
+        if(ls == null)
+            return;
+        //Inizializzo 
+        ListaUtenti lstUtenti = getListaUtenti();
+        List<ListaSpedizioni> lstList = new ArrayList<>();
+        //Mi recupero tutti gli utenti registrati
+        for (int i = 0; i < lstUtenti.getNumeroUtenti(); i++) {
+            Utente us = lstUtenti.getUtenteFromIdx(i);
+            //Scarto quello di cui devo salvare le modifiche
+            if (!us.getNomeUtente().equals(user)) {
+                ListaSpedizioni lst_tmp = us.getListaSpedizioni();
+                lstList.add(lst_tmp);
+            }
+        }
+        //Elimino il contenuto del file ship
+        try {
+            clearFile(file_ship);
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error - Clear file");
+        }
+        //Salvo la nuova lista spedizione del nuovo utente
+        for (int y = 0; y < ls.getNumeroSpedizioni(); y++) {
+            DataUtility.salvaSpedizione(ls.getSpedizione(y));
+        }
+        //Salvo le precedenti informazioni
+        for (int i = 0; i < lstList.size(); i++) {
+            ListaSpedizioni lst_tmp = lstList.get(i);
+            for (int z = 0; z < lst_tmp.getNumeroSpedizioni(); z++) {
+                DataUtility.salvaSpedizione(lst_tmp.getSpedizione(z));
             }
         }
     }

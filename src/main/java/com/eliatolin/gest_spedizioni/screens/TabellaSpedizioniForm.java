@@ -144,7 +144,6 @@ public class TabellaSpedizioniForm extends JFrame implements ActionListener, Win
         if (e.getSource() == btnRemove) {
             ListaSpedizioni lstSped = tablemodel.getLista();
             Spedizione s = lstSped.getSpedizione(table.getSelectedRow());
-
             if (s.SpedizioneTerminata()) {
 
                 String nome = s.getUtente();
@@ -196,7 +195,7 @@ public class TabellaSpedizioniForm extends JFrame implements ActionListener, Win
         }
 
         if (e.getSource() == btnBack) {
-            DataUtility.salvaInfo(lstUtenti);
+            SalvaInformazioni();
             WelcomeScreen ws = new WelcomeScreen();
             ws.setVisible(true);
             this.dispose();
@@ -204,9 +203,17 @@ public class TabellaSpedizioniForm extends JFrame implements ActionListener, Win
 
     }
 
+    public void SalvaInformazioni()
+    {
+        if(isAdmin)
+            DataUtility.SalvaListaSpedizione(tablemodel.getLista());
+        else
+            DataUtility.SalvaListaSpedizione(tablemodel.getLista(), user.getNomeUtente());
+    }
+    
     @Override
     public void windowClosing(WindowEvent e) {
-        DataUtility.salvaInfo(lstUtenti);
+        SalvaInformazioni();
         System.exit(0);
     }
 
