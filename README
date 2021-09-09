@@ -1,0 +1,5 @@
+User: admin Password: admin
+BUG:
+1- The saving of the information is always carried out when the table is exited. 
+You should try to view the information of a shipment only once, perhaps using the ID. 
+In my opinion this happens because it saves the shipment many times in the ship file.
