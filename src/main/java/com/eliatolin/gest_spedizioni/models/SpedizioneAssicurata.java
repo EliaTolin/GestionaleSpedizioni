@@ -28,6 +28,12 @@ public class SpedizioneAssicurata extends Spedizione{
     }
     
     @Override
+    public float getValoreAssicurato()
+    {
+        return valoreAssicurato;
+    }
+    
+    @Override
     public void aggiornaStato()
     {
         super.aggiornaStato();
