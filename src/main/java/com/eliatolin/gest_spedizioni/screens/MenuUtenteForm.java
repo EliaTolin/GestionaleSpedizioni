@@ -83,7 +83,7 @@ public class MenuUtenteForm extends JFrame implements ActionListener{
         else if(ae.getSource() == jbTabella)
         {
             ListaUtenti lstUtenti = DataUtility.getListaUtenti();
-            TabellaSpedizioni tb = new TabellaSpedizioni(user,lstUtenti);
+            TabellaSpedizioniForm tb = new TabellaSpedizioniForm(user,lstUtenti);
             tb.setVisible(true);
             this.dispose();
         }

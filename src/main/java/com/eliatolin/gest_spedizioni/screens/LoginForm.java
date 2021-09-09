@@ -102,7 +102,7 @@ public class LoginForm extends JFrame implements ActionListener {
             if (admin) {
                 if (username.equals("admin") && password.equals("admin")) {
                     ListaUtenti lstUtenti = DataUtility.getListaUtenti();
-                    TabellaSpedizioni tb = new TabellaSpedizioni(lstUtenti);
+                    TabellaSpedizioniForm tb = new TabellaSpedizioniForm(lstUtenti);
                     tb.setVisible(true);
                     this.dispose();
                 }

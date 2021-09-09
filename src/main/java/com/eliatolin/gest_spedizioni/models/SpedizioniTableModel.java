@@ -36,8 +36,6 @@ public class SpedizioniTableModel extends AbstractTableModel {
 
         Spedizione ship = lstSpedizioni.getSpedizione(row);
         
-        String id = ship.getId();
-        
         return switch (col) {
             case 0 -> ship.getUtente();
             case 1 -> ship.getId();

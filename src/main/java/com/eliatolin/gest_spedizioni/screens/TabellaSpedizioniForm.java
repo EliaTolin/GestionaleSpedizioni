@@ -20,7 +20,7 @@ import java.awt.event.WindowListener;
  * @author eliatolin
  */
 //Tabella che rappresenta tutte le spedizioni per utente o per tutti gli utenti.
-public class TabellaSpedizioni extends JFrame implements ActionListener, WindowListener {
+public class TabellaSpedizioniForm extends JFrame implements ActionListener, WindowListener {
 
     private ListaUtenti lstUtenti;
     private ListaSpedizioni lstSpedizioni;
@@ -41,7 +41,7 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
     private boolean enableModify = false;
     Dimension dButton = new Dimension(120, 40);
 
-    public TabellaSpedizioni() {
+    public TabellaSpedizioniForm() {
 
         setSize(600, 600);
 
@@ -70,7 +70,7 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
         tablePanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    public TabellaSpedizioni(Utente u, ListaUtenti l) {
+    public TabellaSpedizioniForm(Utente u, ListaUtenti l) {
         this();
         user = u;
         lstUtenti = l;
@@ -89,7 +89,7 @@ public class TabellaSpedizioni extends JFrame implements ActionListener, WindowL
         this.add(tablePanel);
     }
 
-    public TabellaSpedizioni(ListaUtenti l) {
+    public TabellaSpedizioniForm(ListaUtenti l) {
         this();
         lstUtenti = l;
         setAdministrator(true);
