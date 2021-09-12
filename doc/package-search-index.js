@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"gestioneSpedizioni"},{"l":"gestioneSpedizioni.models"},{"l":"gestioneSpedizioni.screens"},{"l":"gestioneSpedizioni.utils"}];updateSearchResults();

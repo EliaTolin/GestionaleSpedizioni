@@ -1,0 +1,3 @@
+INDEX VERSION 1.131+C:\Users\Elia\Desktop\gestioneSpedizioni\src\gestioneSpedizioni\.metadata\.plugins\org.eclipse.jdt.core
+4233883085.index
+1729954012.index

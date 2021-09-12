@@ -1,0 +1,44 @@
+Nel progetto gestioneSpedizioni il polimorfismo è presente in:
+
+1) TabellaSpedizioniForm
+
+Quando l'admin accede alla tabella ha la possibilità di modificare o rimuovere una spedizioni.
+Nel caso in cui scelga di rimuovere bisogna assicurarsi che la spedizione sia in uno stato finale se è normale
+o che sia stato erogato il rimborso nel caso di una spedizione assicurata.
+Da qui quindi in Runtime viene deciso se utilizzare il metodo SpedizioneTerminata() della classe padre, se è una spedizione
+normale, oppure se utilizzare SpedizioneTerminata() della classe figlio se assicurata.
+Questo perchè la ListaSpedizione contiene entrambi i tipi di Spedizioni.
+
+2) CheckRimborso
+Allo stesso modo lo ritroviamo sempre nella tabella spedizioni quando il login viene effettuato da un utente.
+In questo caso viene verificato lo stato della spedizione assicurata che sia FALLITA, in quel caso è possibile
+richiedere il rimborso.
+Anche in questo caso viene deciso a Runtime la funzione a utilizzare nel caso in cui sia una spedizione assicurata o 
+normale. Nel caso della normale ritornerà sempre false.
+
+3) SalvaListaSpedizioni
+ 
+Ritroviamo il polimorfismo nei metodi SalvaListaSpedizione e salvainfo nella classe DataUtility,in questi casi viene scelto
+a Runtime il metodo da utilizzare per salvare la spedizione a seconda se è Assicurata o normale.
+Il sorgente va a richiamare il metood SalvaSpedizione e viene scelta se utilizzare salvaSpedizione che accetta
+come parametro Spedizione o SpedizioneAssicurata
+
+4) ThreadSpedizioni
+
+Nel thread dedito al cambiamento di stato delle spedizioni ritroviamo il polimorfismo sia quando riceviamo lo stato attuale
+della spedizione sia quando dobbiamo settare il nuovo stato della spedizione.
+Il processo a seconda della spedizione con cui sta lavorando sceglierà se andare nella classe Spedizione, che è la padre, o
+nella classe figlia SpedizioneAssicurata.
+
+5) SpedizioneTableModel
+
+Come il caso precedente troviamo il polimorfismo quando viene settato un nuovo valore di stato 
+nel metodo setValueAt.
+In quel caso come in tutti gli altri a runtime si deciderà verso quale classe dirigersi per il salvataggio
+dello stato.
+
+6) AggiungiSpedizioneForm
+
+Ritroviamo il polimorfismo quando dobbiamo salvare una spedizione.
+In questo caso, dopo i dediti controlli, si richiama il metodo salvaSpedizione che si trova nella classe DataUtility
+che a RunTime andrà a scegliere se richiamare il metodo con salvaspedizione con spedizione assicurata o spedizione normale.
